@@ -22,20 +22,19 @@ session_start();
 
             $registro1=mysqli_query($conexion,$compdni);
 
-            if($registro=mysqli_fetch_row($registro1)){
-                if($registro[0]=="$usuario"){
-                    if($registro[10]=="$pass"){
-                        //SI TODO ESTA CORRECTO LLEVA A PACIENTE
-                        $_SESSION["DNI"]=$usuario;
-                        $_SESSION["PASS"]=$pass;
-                        header("Location: inicio_pac.php");
-                        exit();
-                    }else{
-                        //CONTRASEÑA INCORRECTA PERO USUARIO CORRECTO
-                        $_SESSION['error'] = "Contraseña incorrecta";
-                        header('Location: ../login.php');
-                        exit();
-                    }
+            if ($registro = mysqli_fetch_assoc($registro1)) {
+                if ($registro['USER_PASS'] == $pass) {
+                    //SI TODO ESTA CORRECTO LLEVA A PACIENTE
+                    $_SESSION["DNI"]=$usuario;
+                    $_SESSION["PASS"]=$pass;
+                    $_SESSION["ROL"] = $registro['USER_ROL'];
+                    header("Location: ../home.html");
+                    exit();
+                }else{
+                    //CONTRASEÑA INCORRECTA PERO USUARIO CORRECTO
+                    $_SESSION['error'] = "Contraseña incorrecta";
+                    header('Location: ../login.php');
+                    exit();
                 }
             }else{
                 //USUARIO INCORRECTO
@@ -57,7 +56,6 @@ session_start();
         $MAIL=$_POST['mail'];
         $PASS=$_POST['pass'];
         $PASSV=$_POST['passv'];
-
         $POSTAL=$_POST['pos'];
         $DIR=$_POST['dir'];
         $CIU=$_POST['ciu'];
@@ -66,15 +64,24 @@ session_start();
 
         //SI LAS DOS CONTRASEÑAS SON IGUALES HACE LA CONSULTA DE INSERTAR
         if($PASS==$PASSV){
-            $insertarUser = "INSERT INTO `USUARIOS` (`PAC_DNI`, `PAC_NOM`, `PAC_APE`, `PAC_COD_POSTAL`, `PAC_DIRECCION`, `PAC_CIU`, `PAC_PROV`, `PAC_TEL`, `PAC_MAIL`, `PAC_FEC_NAC`, `PAC_PASS`, `EMPLE_COD`) 
-            VALUES ('$DNI', '$NOM ', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$medaleatorio')";
+            $insertarUser = "INSERT INTO `USUARIOS` (
+                USER_DNI, USER_NOM, USER_APE, USER_COD_POSTAL, USER_DIR, USER_TEL, USER_MAIL, USER_NAC, USER_PASS, USER_ROL, PAC_CIU, PAC_PROV
+            ) VALUES (
+                '$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$TEL', '$MAIL', '$NAC', '$PASS', 'PACIENTE', '$CIU', '$PROV'
+            )";
 
-            mysqli_query($conexion,$insertarUser);
-            //REDIRECCIONA A LOGIN PACIENTE
-            header('location: login.php');
+            if(mysqli_query($conexion,$insertarUser)){
+                header("location: ../login.php");
+            }else{
+                $_SESSION['error'] = "Contraseña incorrecta";
+                header('Location: ../registro.php');
+                exit();
+            }
         }else{
             //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
-            echo "Las contraseñas no coinciden";
+            $_SESSION['error'] = "Contraseña incorrecta";
+            header('Location: ../registro.php');
+            exit();
         }
     }
 ?>
