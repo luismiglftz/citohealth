@@ -1,0 +1,123 @@
+/*############*/
+/*## GLOBAL ##*/
+/*############*/
+/*fuentes*/
+
+@font-face {
+    font-family: 'AdobeThai';
+    src: url('fonts/AdobeThai-Regular.eot') format('eot'),
+        url('fonts/AdobeThai-Regular.woff') format('woff'),
+        url('fonts/AdobeThai-Regular.woff2') format('woff2'),
+        url('fonts/AdobeThai-Regular.ttf') format('ttf');
+    font-style: normal;
+    font-weight: normal;
+  }
+/*CAMBIAMOS TODAS LAS FUENTES*/
+h1, h2, h3, h4, p, td, th, li, label, a, input, button{
+    font-family: 'AdobeThai' !important;
+}
+
+/*SE OCULTA LA BARRA DE SCROLL PERO NO LA DESHABILITA*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+/*body, html{
+    scrollbar-width: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}/*
+
+/*#######################*/
+/*#### --- LOGIN --- ####*/
+/*##3####################*/
+
+body#login, body#registro{
+    background-color: #849aa2;
+}
+
+div.contenedorform{
+    margin-top: 20px;
+    margin-left: 0;
+    font-weight: 400;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    padding: 26px 24px 46px 25px;
+    border-radius: 10px;
+    box-shadow: 0 1px 50px rgb(2 2 2 / 30%);
+}
+
+div.padrecontenedor{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 600px;
+    margin-top: 30px;
+}
+
+#info div.padrecontenedor{
+    height: 200px !important;
+}
+
+#infocitas div.padrecontenedor{
+    height: 390px !important;
+}
+
+/*INPUTS*/
+
+input{
+    border: none;
+    border-bottom: 1px solid #d2d2d2;
+    border-width: 0.0625rem;
+    padding: 0.1875rem 0.3125rem;
+    margin: 0 6px 16px 0;
+}
+
+input:focus-visible{
+    border: 1px transparent solid !important;
+}
+
+label{
+    font-size: 17px;
+    line-height: 1.5;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+button{
+    width: 100%;
+    height: 40px;
+    padding: 0px 12px 2px 12px;
+    background-color: #268cc0;
+    color: white;
+    font-size: 14px;
+}
+
+/*##############*/
+/*## REGISTRO ##*/
+/*##############*/
+
+
+#registro div.padrecontenedor{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 600px;
+    margin-top: 30px;
+    justify-content: space-evenly;
+}
+
+#registro div.padrepeque{
+    border-radius: 1%;
+    background-color: #fff;
+    border: 1px black solid;
+}
+
+#registro form.bloque{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 15px;
+}
