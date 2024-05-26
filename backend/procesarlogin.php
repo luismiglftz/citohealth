@@ -26,9 +26,8 @@ session_start();
                 if ($registro['USER_PASS'] == $pass) {
                     //SI TODO ESTA CORRECTO LLEVA A PACIENTE
                     $_SESSION["DNI"]=$usuario;
-                    $_SESSION["PASS"]=$pass;
                     $_SESSION["ROL"] = $registro['USER_ROL'];
-                    header("Location: ../home.html");
+                    header("Location: ../home.php");
                     exit();
                 }else{
                     //CONTRASEÑA INCORRECTA PERO USUARIO CORRECTO
