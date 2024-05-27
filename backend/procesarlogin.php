@@ -1,7 +1,6 @@
 <?php
 //CONECTAMOS A LA BASE DE DATOS
 include("functions.php");
-session_start();
 
     
     //SI SE PULSA INICIAR SESION:
@@ -25,6 +24,7 @@ session_start();
             if ($registro = mysqli_fetch_assoc($registro1)) {
                 if ($registro['USER_PASS'] == $pass) {
                     //SI TODO ESTA CORRECTO LLEVA A PACIENTE
+                    
                     $_SESSION["DNI"]=$usuario;
                     $_SESSION["ROL"] = $registro['USER_ROL'];
                     header("Location: ../home.php");

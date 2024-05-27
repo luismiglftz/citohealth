@@ -10,9 +10,9 @@
 <?php
 include "backend/functions.php";
 verificarSesion();
-includeHeader();
 ?>
 <body>
+    <?php includeHeader(); ?>
     <H1>EXITO</H1>
     
 </body>

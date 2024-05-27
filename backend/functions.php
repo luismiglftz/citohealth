@@ -1,4 +1,5 @@
 <?php
+    session_start();
     // FUNCION PARA CONECTAR A LA BASE DE DATOS
     function conectarBD($nombreBD = "CitoHealth", $servidor = "localhost", $usuario = "root", $password = "") {
         $conexion = mysqli_connect($servidor, $usuario, $password);
@@ -10,14 +11,42 @@
 
         return $conexion;
     }
+
+    function obtenerDatosUsuarios(){
+        $conexion = conectarBD();
+        $usuario=$_SESSION["DNI"];
+
+        $compdni = "SELECT * FROM USUARIOS WHERE USER_DNI = '$usuario';";
+
+        $registro1=mysqli_query($conexion,$compdni);
+
+        if ($registro = mysqli_fetch_assoc($registro1)) {
+            //GUARDAMOS TODOS LOS DATOS DEL USUARIO
+            $_SESSION["USER_NOM"] = $registro["USER_NOM"];
+            $_SESSION["USER_APE"] = $registro["USER_APE"];
+            $_SESSION["USER_COD_POSTAL"] = $registro["USER_COD_POSTAL"];
+            $_SESSION["USER_DIR"] = $registro["USER_DIR"];
+            $_SESSION["USER_TEL"] = $registro["USER_TEL"];
+            $_SESSION["USER_NAC"] = $registro["USER_NAC"];
+            $_SESSION["USER_MAIL"] = $registro["USER_MAIL"];
+            $_SESSION["USER_ROL"] = $registro["USER_ROL"];
+            $_SESSION["EMPLE_SUELDO"] = $registro["EMPLE_SUELDO"];
+            $_SESSION["EMPLE_PUE"] = $registro["EMPLE_PUE"];
+            $_SESSION["PAC_CIU"] = $registro["PAC_CIU"];
+            $_SESSION["PAC_PROV"] = $registro["PAC_PROV"];
+            $_SESSION["DEP_COD"] = $registro["DEP_COD"];
+        } else {
+            //EN EL CASO QUE INTENTEN ACCEDER SIN USUARIO
+            echo "Usuario no encontrado.";
+        }
     
-    //FIX: Error aquí, redirecciones infinitas buscar posible solucion
+        mysqli_close($conexion);
+    }
+    
+    //FIXED
     function verificarSesion() {
         if (!isset($_SESSION["DNI"])) {
             header('Location: login.php');
-            exit();
-        }else{
-            header('Location: home.php');
             exit();
         }
     }
@@ -25,13 +54,14 @@
     //HEADER
     
     function includeHeader() {
+        obtenerDatosUsuarios();
         echo '<nav class="header">
                 <div class="header">
                     <div class="redes">
                         <!--NOMBRE APELLIDO Y REDES SOCIALES-->
-                        <p>Hola ' . $_SESSION["no"] . ' ' . $_SESSION["PASS"] . '</p>
-                        <a href="https://www.instagram.com/luismiguel.ff/"><img src="../assets/media/instagram.png" alt="info"></a>
-                        <a href="https://twitter.com/Luis_Fentanez"><img src="../assets/media/twitter.png" alt="info"></a>
+                        <p>Hola ' . $_SESSION["USER_NOM"] . ' ' . $_SESSION["USER_APE"] . '</p>
+                        <a href="https://www.instagram.com/luismiguel.ff/"><img src="assets/media/instagram.png" alt="info"></a>
+                        <a href="https://twitter.com/Luis_Fentanez"><img src="assets/media/twitter.png" alt="info"></a>
                     </div>
                 </div>
             </nav>';
