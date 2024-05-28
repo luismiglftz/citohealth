@@ -45,7 +45,7 @@ $USUARIOS = "CREATE TABLE USUARIOS (
     USER_NAC      DATE NOT NULL,
     USER_MAIL     VARCHAR(50) NOT NULL,
     USER_PASS     VARCHAR(30) NOT NULL,
-    USER_ROL      ENUM('EMPLEADO', 'PACIENTE') NOT NULL,
+    USER_ROL      ENUM('EMPLEADO', 'PACIENTE', 'ADMIN') NOT NULL,
     EMPLE_SUELDO  INT(10),
     EMPLE_PUE     VARCHAR(20),
     PAC_CIU       VARCHAR(50),
@@ -119,6 +119,34 @@ if (mysqli_query($conexion, $CITAS)) {
     echo "La tabla citas no se ha creado correctamente. <br>";
 }
 
+// CREACION TABLA FARMACOS
+$FARMACOS = "CREATE TABLE FARMACOS(
+    FARM_COD      INT(10) PRIMARY KEY AUTO_INCREMENT,
+    FARM_NOM      VARCHAR(50) NOT NULL,
+    FARM_DESC     VARCHAR(200) NOT NULL
+)";
+
+if (mysqli_query($conexion, $FARMACOS)) {
+    echo "Tabla fármacos creada correctamente. <br>";
+} else {
+    echo "La tabla fármacos no se ha creado correctamente. <br>";
+}
+
+// CREACION TABLA TRATAMIENTOS_FARMACOS
+$TRATAMIENTOS_FARMACOS = "CREATE TABLE TRATAMIENTOS_FARMACOS(
+    TRAT_COD      INT(3) NOT NULL,
+    FARM_COD      INT(10) NOT NULL,
+    PRIMARY KEY (TRAT_COD, FARM_COD),
+    FOREIGN KEY (TRAT_COD) REFERENCES TRATAMIENTOS(TRAT_COD) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (FARM_COD) REFERENCES FARMACOS(FARM_COD) ON DELETE CASCADE ON UPDATE CASCADE
+)";
+
+if (mysqli_query($conexion, $TRATAMIENTOS_FARMACOS)) {
+    echo "Tabla tratamientos_fármacos creada correctamente. <br>";
+} else {
+    echo "La tabla tratamientos_fármacos no se ha creado correctamente. <br>";
+}
+
 // AÑADIMOS LAS CLAVES FORANEAS
 $cons1 = "ALTER TABLE USUARIOS ADD CONSTRAINT fk_med_dep FOREIGN KEY (DEP_COD) REFERENCES DEPARTAMENTOS(DEP_COD) ON DELETE CASCADE ON UPDATE CASCADE;";
 mysqli_query($conexion, $cons1);
@@ -140,6 +168,12 @@ mysqli_query($conexion, $cons6);
 
 $cons7 = "ALTER TABLE CITAS ADD CONSTRAINT fk_pac_cit FOREIGN KEY (PAC_DNI) REFERENCES USUARIOS(USER_DNI) ON DELETE CASCADE ON UPDATE CASCADE;";
 mysqli_query($conexion, $cons7);
+
+$cons8 = "ALTER TABLE TRATAMIENTOS_FARMACOS ADD CONSTRAINT fk_trat_farm_trat FOREIGN KEY (TRAT_COD) REFERENCES TRATAMIENTOS(TRAT_COD) ON DELETE CASCADE ON UPDATE CASCADE;";
+mysqli_query($conexion, $cons8);
+
+$cons9 = "ALTER TABLE TRATAMIENTOS_FARMACOS ADD CONSTRAINT fk_trat_farm_farm FOREIGN KEY (FARM_COD) REFERENCES FARMACOS(FARM_COD) ON DELETE CASCADE ON UPDATE CASCADE;";
+mysqli_query($conexion, $cons9);
 
 ?>
 </body>

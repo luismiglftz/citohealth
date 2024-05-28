@@ -17,16 +17,33 @@ h1, h2, h3, h4, p, td, th, li, label, a, input, button{
     font-family: 'AdobeThai' !important;
 }
 
+a{
+    text-decoration: none;
+    color: #dce0e2;
+}
+
+a:hover{
+    color: #165373;
+    transition: 0.3s; 
+}
 /*SE OCULTA LA BARRA DE SCROLL PERO NO LA DESHABILITA*/
 ::-webkit-scrollbar {
     display: none;
 }
 
-/*body, html{
-    scrollbar-width: none;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}/*
+body{
+    background-color: #f5f5f5;
+    height: -webkit-fill-available;
+    margin-top: 100px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+html{
+    background-color: #aac2ce;
+    height: 100%;
+}
 
 /*#######################*/
 /*#### --- LOGIN --- ####*/
@@ -136,8 +153,6 @@ button{
 
 /* INPUTS */
 
-/*INPUTS*/
-
 input{
     border: none;
     border-bottom: 1px solid #d2d2d2;
@@ -231,28 +246,108 @@ a.registro.res:hover{
 /*##### --- HEADER --- #####*/
 /*##3#######################*/
 
-nav.header{
-    height: 87px;
-    width: 99%;
-    position: absolute;
+header{
+    height: 100px;
+    width: 100%;
+    z-index: 0;
+    position: fixed;
     top: 0;
-    background-color: #268cc0;
-    box-shadow: 0px 1px 60px rgb(2 2 2 / 60%);
-    margin-left: 7px;
+    left: 0;
+    right: 0;
+    background-color: #6d9db5;
+    box-shadow: 0px 1px 60px rgb(2 2 2 / 35%);
 }
 
-div.redes{
+header div{
+    height: 100%;
+}
+
+header div.header{
     display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
-    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 
-div.redes a{
-    margin-right: 20px;
+header div.nombre{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-right: 10px;
+    margin-bottom: 20px;
 }
+
+header div.nombre div{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    color: rgb(217, 224, 224);
+}
+
+header div.nombre div img{
+    height: 20px;
+    margin-left: 10px;
+}
+
+header div.nombre nav.menu_sup a{
+    padding: 10px;
+    text-decoration: none;
+    color: rgb(217, 224, 224);
+}
+
+header div.nombre nav.menu_sup a:hover{
+    background-color: #1e495f;
+    transition: 0.3s;
+}
+
 
 nav.header p{
-    color: white;
+    color: rgb(217, 224, 224);;
     margin-right: 20px;
+}
+
+header div.header div.logo img{
+    height: 100%;
+}
+
+/*##########################*/
+/*##### --- FOOTER --- #####*/
+/*##3#######################*/
+
+footer{
+    height: 120px;
+    width: 100%;
+    z-index: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #6d9db5;
+    box-shadow: 0px 1px 60px rgb(2 2 2 / 35%);
+    color: #dce0e2;
+}
+
+footer div.footer_sup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+footer div.footer_inf{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+footer div.footer_inf a{
+    margin: 0px 10px;
+    text-decoration: none;
+    color: #dce0e2;
+}
+
+footer div.footer_inf a:hover{
+    color: #165373;
+    transition: 0.3s; 
 }

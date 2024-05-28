@@ -43,7 +43,6 @@
         mysqli_close($conexion);
     }
     
-    //FIXED
     function verificarSesion() {
         if (!isset($_SESSION["DNI"])) {
             header('Location: login.php');
@@ -51,20 +50,10 @@
         }
     }
 
-    //HEADER
-    
-    function includeHeader() {
-        obtenerDatosUsuarios();
-        echo '<nav class="header">
-                <div class="header">
-                    <div class="redes">
-                        <!--NOMBRE APELLIDO Y REDES SOCIALES-->
-                        <p>Hola ' . $_SESSION["USER_NOM"] . ' ' . $_SESSION["USER_APE"] . '</p>
-                        <a href="https://www.instagram.com/luismiguel.ff/"><img src="assets/media/instagram.png" alt="info"></a>
-                        <a href="https://twitter.com/Luis_Fentanez"><img src="assets/media/twitter.png" alt="info"></a>
-                    </div>
-                </div>
-            </nav>';
+
+    function pedirCita(){
+        
     }
+
 
 ?>
