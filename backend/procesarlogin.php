@@ -17,16 +17,14 @@ include("functions.php");
             $pass=$_POST["pass"];
 
             //TODO IMPLEMENTAR EL ANTI-INYECCION DE SQL
-            $compdni = "SELECT * FROM USUARIOS WHERE USER_DNI = '$usuario';";
+            $compdni = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$usuario';";
+            $registroPaciente=mysqli_query($conexion,$compdni);
 
-            $registro1=mysqli_query($conexion,$compdni);
-
-            if ($registro = mysqli_fetch_assoc($registro1)) {
-                if ($registro['USER_PASS'] == $pass) {
+            if ($registroPaciente  = mysqli_fetch_assoc($registroPaciente)) {
+                if ($registroPaciente['PAC_PASS'] == $pass) {
                     //SI TODO ESTA CORRECTO LLEVA A PACIENTE
-                    
                     $_SESSION["DNI"]=$usuario;
-                    $_SESSION["ROL"] = $registro['USER_ROL'];
+                    $_SESSION["ROL"] = "PACIENTE";
                     header("Location: ../home.php");
                     exit();
                 }else{
@@ -36,10 +34,29 @@ include("functions.php");
                     exit();
                 }
             }else{
-                //USUARIO INCORRECTO
-                $_SESSION['error'] = "El usuario $usuario no se encuentra en la base de datos. Por favor introduzca un DNI válido.";
-                header('Location: ../login.php');
-                exit();
+                //SI NO SE ENCUENTRA EN LA TABLA PACIENTES SE BUSCA EN LA DE EMPLEADOS
+                $compdniEmpleado = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
+                $registroEmpleado=mysqli_query($conexion,$compdniEmpleado);
+
+
+                if ($registroEmpleado = mysqli_fetch_assoc($registroEmpleado)) {
+                    if ($registroEmpleado['EMPLE_PASS'] == $pass) {
+                        //SI TODO ESTA CORRECTO LLEVA A EMPLEADO
+                        $_SESSION["DNI"]=$usuario;
+                        $_SESSION["ROL"] = $registroEmpleado["EMPLE_ROL"];
+                        header ("Location: ../home.php");
+                        exit();
+                    }else{
+                        $_SESSION['error'] = "Contraseña incorrecta";
+                        header('Location: ../login.php');
+                        exit();
+                    }
+                }else{
+                    //USUARIO INCORRECTO
+                    $_SESSION['error'] = "El usuario $usuario no se encuentra en la base de datos. Por favor introduzca un DNI válido.";
+                    header('Location: ../login.php');
+                    exit();
+                }
             }
         }
     }
@@ -47,27 +64,39 @@ include("functions.php");
     if (isset($_POST['register'])) {
         $conexion = conectarBD();
 
+        //CONSULTA MAXIMO Y MINIMO PARA SELECCIONAR UN NUMERO ALEATORIO Y ASI ASIGNAR UN EMPLEADO ALEATORIO QUE NO SEA DE ADMINISTRACION
+        $codmax = "SELECT MAX(EMPLE_COD) FROM EMPLEADOS WHERE DEP_COD NOT LIKE '6' OR DEP_COD NOT LIKE '1'";
+        $MAX = mysqli_query($conexion,$codmax);
+
+        $codmin = "SELECT MIN(EMPLE_COD) FROM EMPLEADOS WHERE DEP_COD NOT LIKE '6' OR DEP_COD NOT LIKE '1'";
+        $MIN = mysqli_query($conexion,$codmin);
+
+        $nummax = mysqli_fetch_row($MAX);
+        
+        $nummin = mysqli_fetch_row($MIN);
+
+        $medaleatorio = mt_rand($nummin[0],$nummax[0]);
+
+
         // DEFINIMOS TODAS LAS VARIABLES PARA FACIL ACCESO
-        $DNI=$_POST['DNI'];
-        $NOM=$_POST['name'];
-        $APE=$_POST['ape'];
-        $TEL=$_POST['tel'];
-        $MAIL=$_POST['mail'];
+        $DNI=$_POST['DNI'];//
+        $NOM=$_POST['name'];//
+        $APE=$_POST['ape'];//
+        $TEL=$_POST['tel'];//
+        $MAIL=$_POST['mail'];//
         $PASS=$_POST['pass'];
         $PASSV=$_POST['passv'];
-        $POSTAL=$_POST['pos'];
-        $DIR=$_POST['dir'];
-        $CIU=$_POST['ciu'];
-        $PROV=$_POST['prov'];
-        $NAC=$_POST['nac'];
+        $POSTAL=$_POST['pos'];//
+        $DIR=$_POST['dir'];//
+        $CIU=$_POST['ciu'];//
+        $PROV=$_POST['prov'];//
+        $NAC=$_POST['nac'];//
 
         //SI LAS DOS CONTRASEÑAS SON IGUALES HACE LA CONSULTA DE INSERTAR
         if($PASS==$PASSV){
-            $insertarUser = "INSERT INTO `USUARIOS` (
-                USER_DNI, USER_NOM, USER_APE, USER_COD_POSTAL, USER_DIR, USER_TEL, USER_MAIL, USER_NAC, USER_PASS, USER_ROL, PAC_CIU, PAC_PROV
-            ) VALUES (
-                '$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$TEL', '$MAIL', '$NAC', '$PASS', 'PACIENTE', '$CIU', '$PROV'
-            )";
+            $insertarUser = "INSERT INTO PACIENTES (
+                PAC_DNI, PAC_NOM, PAC_APE, PAC_COD_POSTAL, PAC_DIRECCION, PAC_CIU, PAC_PROV, PAC_TEL, PAC_MAIL, PAC_FEC_NAC, PAC_PASS, EMPLE_COD
+                )VALUES('$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$medaleatorio')";
 
             if(mysqli_query($conexion,$insertarUser)){
                 header("location: ../login.php");

@@ -1,9 +1,9 @@
 <?php
     include "../backend/functions.php";
-    verificarSesion();
+    pedirCita();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,60 +12,7 @@
     <title>Pedir cita</title>
 </head>
 <body id="cita">
-<?php 
-//CONEXION A LA BASE DE DATO Y GUARDADO VARIABLE DNI INICIO SESION
-session_start();
 
-$DNI=$_SESSION['DNI'];
-
-$nombreBD='GeoHealth';
-
-$servidor='localhost';
-
-$usuario='root';
-
-$password='';
-
-
-$conexion=mysqli_connect($servidor,$usuario,$password);
-
-mysqli_select_db($conexion,$nombreBD);
-
-//CONSULTA TABLA PACIENTES
-$compdni = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$DNI';";
-
-$infopac=mysqli_query($conexion,$compdni);
-
-$info=mysqli_fetch_row($infopac);
-
-
-        //PASAMOS LAS VARIABLES
-$nom=$info[1];
-
-$ape=$info[2];
-
-$emplecod=$info[11];
-
-
-//CUANDO SE PULSA EL BOTON ENVIAR SE INSERTAN LOS DATOS
-if (isset($_POST['enviar'])) {
-
-    //PASAMOS LAS VARIABLES QUE SE VAN A NECESITAR
-    $fec=$_POST['fec'];
-    $afec=$_POST['afec'];
-    $tipo=$_POST['tipo'];
-
-    //SE INSERTAN LOS DATOS Y REDIRIGE
-    $insertarCIT = "INSERT INTO `citas` (`CITA_COD`, `PAC_DNI`, `EMPLE_COD`, `CITA_FEC`, `CITA_AFEC`, `CITA_TIPO`) 
-
-    VALUES (NULL, '$DNI', '$emplecod', '$fec', '$afec', '$tipo');";
-
-    mysqli_query($conexion,$insertarCIT);
-
-    header('location: ver-citas.php');
-}
-
-?>
 <!--FORMULARIO-->
 <div class="padrecontenedor">
     <div class="contenedorform">
