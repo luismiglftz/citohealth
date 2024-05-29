@@ -1,8 +1,6 @@
 <?php
 //CONECTAMOS A LA BASE DE DATOS
-include("functions.php");
-
-    
+include_once("functions.php");
     //SI SE PULSA INICIAR SESION:
     if (isset($_POST["login"])) {
         if (empty($_POST["DNI"]) || empty($_POST["pass"])) {
@@ -110,6 +108,44 @@ include("functions.php");
             $_SESSION['error'] = "Contraseña incorrecta";
             header('Location: ../registro.php');
             exit();
+        }
+    }
+
+    
+    //TODO TENGO QUE ARREGLAR ESTO!! SE HA ROTO???? =(
+
+    function comprobarPassword(){
+        $conexion = conectarBD();
+        $usuario=$_SESSION["DNI"];
+
+        $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
+        $pass = mysqli_query($conexion, $selectPass);
+        $pasaOld=mysqli_fetch_row($pass);
+
+        return $pasaOld[0];
+    }
+
+    //CUANDO SE PULSA EL BOTON
+    if(isset($_POST['reset'])){
+        $pass = comprobarPassword();
+        if($_POST['passactual']==$pass){
+            if($_POST['pass']==$_POST['passv']){
+                $conexion = conectarBD();
+                $newPass = $_POST['pass'];
+
+                //CONSULTA QUE ACTUALIZA LA CONTRASEÑA
+                $actpass = "UPDATE PACIENTES SET PAC_PASS = '$newPass' WHERE PAC_DNI = '$dni';";
+
+                $actualizar=mysqli_query($conexion,$actpass);
+
+                $_SESSION['PASS']=$newpass;
+
+                header('location: info-personal.php');
+            }else{
+                echo "<h2>Las contraseñas no coinciden</h2>";
+            }
+        }else{
+            echo "<h2>La contraseña introducida no es válida</h2>";
         }
     }
 ?>

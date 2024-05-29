@@ -15,8 +15,7 @@
     function obtenerDatosUsuarios(){
         $conexion = conectarBD();
         $usuario=$_SESSION["DNI"];
-
-        $compdni = "SELECT * FROM USUARIOS WHERE USER_DNI = '$usuario';";
+        
         // Buscar primero en la tabla PACIENTES
         $compdniPaciente = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$usuario';";
         $registroPaciente=mysqli_query($conexion,$compdniPaciente);
@@ -30,9 +29,14 @@
             $_SESSION["USER_NAC"] = $registroPaciente["PAC_FEC_NAC"];
             $_SESSION["USER_MAIL"] = $registroPaciente["PAC_MAIL"];
             $_SESSION["USER_ROL"] = "PACIENTE"; // ES PACIENTE
-            $_SESSION["PAC_CIU"] = $registroPaciente["PAC_CIU"];
-            $_SESSION["PAC_PROV"] = $registroPaciente["PAC_PROV"];
-            $_SESSION["EMPLE_COD"] = $registroPaciente["EMPLE_COD"];
+            $_SESSION["USER_CIU"] = $registroPaciente["PAC_CIU"];
+            $_SESSION["USER_PROV"] = $registroPaciente["PAC_PROV"];
+            $empleCod = $registroPaciente["EMPLE_COD"];
+            //PARA SABER SU MEDICO DE CABECERA
+            $medcab = "SELECT EMPLE_NOM, EMPLE_APE, EMPLE_COD FROM EMPLEADOS WHERE EMPLE_COD = $empleCod;";
+            $infomed=mysqli_query($conexion,$medcab);
+            $medcab=mysqli_fetch_row($infomed);
+            $_SESSION["MED_CAB"] = $medcab[0] . " " . $medcab[1] . " (" . $medcab[2] . ")";
         }else{
             // NO EXISTE EL PACIENTE, BUSCAR EN EMPLEADOS
             $compdniEmpleado = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
@@ -47,8 +51,8 @@
                 $_SESSION["USER_NAC"] = $registroEmpleado["EMPLE_NAC"];
                 $_SESSION["USER_MAIL"] = $registroEmpleado["EMPLE_MAIL"];
                 $_SESSION["USER_ROL"] = $registroEmpleado["EMPLE_ROL"]; // DIFERENCIAR ROL
-                $_SESSION["EMPLE_SUELDO"] = $registroEmpleado["EMPLE_SUELDO"];
-                $_SESSION["EMPLE_PUE"] = $registroEmpleado["EMPLE_PUE"];
+                $_SESSION["USER_SUELDO"] = $registroEmpleado["EMPLE_SUELDO"];
+                $_SESSION["USER_PUE"] = $registroEmpleado["EMPLE_PUE"];
                 $_SESSION["DEP_COD"] = $registroEmpleado["DEP_COD"];
             }else{
                 //NO EXISTE EL USUARIO

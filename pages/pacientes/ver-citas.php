@@ -18,7 +18,7 @@
     if (empty($citas)) {
         echo "<h2>NO HAY NINGUNA CITA A TU NOMBRE</h2>";
         echo "<a href='pedir-cita.php' class='registro'>Solicitar cita</a>";
-    } else {
+    }else{
         ?>
         <div class="padrecontenedor">
             <table>
@@ -30,7 +30,7 @@
                     <td>Motivo de la cita</td>
                 </tr>
                 <?php
-                foreach ($citas as $cita) {
+                foreach ($citas as $cita){
                     ?>
                     <tr>
                         <td><?php echo $cita['CITA_COD']; ?></td>
@@ -38,7 +38,7 @@
                         <td><?php echo $cita['CITA_FEC']; ?></td>
                         <td>
                             <?php
-                            switch ($cita['CITA_TIPO']) {
+                            switch ($cita['CITA_TIPO']){
                                 case 1:
                                     echo "Presencial en la clínica";
                                     break;
