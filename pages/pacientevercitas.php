@@ -1,5 +1,5 @@
 <?php
-    include "../backend/functions.php";
+    include_once ("../backend/functions.php");
     verificarSesion();
 ?>
 <!DOCTYPE html>
@@ -8,10 +8,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style/style.css">
+    <link rel="stylesheet" href="../assets/style/style.css">
     <title>Ver citas</title>
 </head>
 <body id="infocitas">
+<?php include_once "../templates/header.php"; ?>
     <?php
     $citas = obtenerCitas();
 
@@ -33,12 +34,12 @@
                 foreach ($citas as $cita){
                     ?>
                     <tr>
-                        <td><?php echo $cita['CITA_COD']; ?></td>
-                        <td><?php echo $cita['EMPLE_NOM_APE'] . " (" . $cita['EMPLE_COD'] . ")"; ?></td>
-                        <td><?php echo $cita['CITA_FEC']; ?></td>
+                        <td><?php echo $cita["CITA_COD"]; ?></td>
+                        <td><?php echo $cita["EMPLE_NOM_APE"] . " (" . $cita["EMPLE_COD"] . ")"; ?></td>
+                        <td><?php echo $cita["CITA_FEC"]; ?></td>
                         <td>
                             <?php
-                            switch ($cita['CITA_TIPO']){
+                            switch ($cita["CITA_TIPO"]){
                                 case 1:
                                     echo "Presencial en la clínica";
                                     break;
@@ -48,16 +49,19 @@
                             }
                             ?>
                         </td>
-                        <td><?php echo $cita['CITA_AFEC']; ?></td>
+                        <td><?php echo $cita["CITA_AFEC"]; ?></td>
                     </tr>
                     <?php
                 }
                 ?>
             </table>
-            <a href="pedir-cita.php" class="registro">Solicitar cita</a>
+            <a href="pacientespedircita.php" class="registro">Solicitar cita</a>
         </div>
         <?php
     }
     ?>
+
+<?php include_once "../templates/footer.php"; ?>
+
 </body>
 </html>

@@ -1,20 +1,21 @@
 <?php
-    include "backend/functions.php";
-    verificarSesion();
+//AQUI NO USAMOS EL CONFIG, POR LLAMARSE INDEX Y TENER PROBLEMAS EN LA URL
+    include_once ("backend/functions.php");
+    verificarSesionIndex();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="assets/style/style.css">
 
 </head>
 <body>
     <?php include_once "templates/header.php"; ?>
     <center>
-        <H1>ESTO ES EL HOME DE LA APP</H1>
+
     </center>
     
 <?php include_once "templates/footer.php"; ?>

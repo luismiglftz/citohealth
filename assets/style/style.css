@@ -33,7 +33,7 @@ a:hover{
 
 body{
     background-color: #f5f5f5;
-    height: -webkit-fill-available;
+    height: inherit;
     margin-top: 100px;
     width: 75%;
     margin-left: auto;
@@ -42,15 +42,117 @@ body{
 
 html{
     background-color: #aac2ce;
-    height: 100%;
+    height: -webkit-fill-available;
 }
+
+/*############*/
+/*## INICIO ##*/
+/*############*/
+
+/*TEXTO BIENVENIDO*/
+
+div.bienvenido{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.bienvenido h1{
+    text-align: center;
+}
+
+div.bienvenido p{
+    text-align: justify;
+}
+
+/*Segundo bloque con imagen y ventajas*/
+
+div.global{
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+div.columna.uno{
+    width: 50%;
+    height: auto;
+}
+
+div.columna.uno img{
+    width:100%;
+    height: auto;
+}
+
+div.columna.dos{
+    width: 50%;
+    height: auto;
+}
+
+img.imgdeco{
+    position: relative;
+    width: 22% !important;
+    right: -35%;
+    top: -19px;
+}
+
+
+/*TABLA VENTAJAS*/
+
+table.ventajas {
+margin-left: 20px;
+}
+
+div.ventajas-cuerpo{
+	margin-left: auto;
+	margin-right: auto;
+	width: 85%;
+}
+/*Titulo mayuscula*/
+table.ventajas th{
+    text-transform: uppercase;
+	color: #165373 !important;
+	font-weight: 900;
+}
+/*estilo textos*/
+table.ventajas td.cuerpo{
+	font-size: 18px !important;
+    line-height: 20px;
+	color: #266da5 !important;
+}
+
+/*Padding y alineacion de los textos*/
+table.ventajas td.cuerpo:nth-child(odd),
+table.ventajas th.titulo:nth-child(odd){
+    text-align: justify;
+    padding-right: 25px;
+}
+
+table.ventajas td.cuerpo:nth-child(even),
+table.ventajas th.titulo:nth-child(even){
+    text-align: justify;
+    padding-left: 25px;
+}
+
+table.ventajas td.cuerpo{
+    text-align: justify;
+}
+
+/*Espaciado entre las dos filas*/
+
+table.ventajas tr.espaciado td{
+    height: 30px;
+}
+
 
 /*#######################*/
 /*#### --- LOGIN --- ####*/
 /*##3####################*/
 
 body#login, body#registro{
-    background-color: #849aa2;
+    background-color: transparent !important;
+    margin-top: 0px !important;
 }
 
 div.contenedorform{
@@ -70,7 +172,6 @@ div.padrecontenedor{
     align-items: center;
     flex-direction: column;
     height: 600px;
-    margin-top: 30px;
 }
 
 #info div.padrecontenedor{
@@ -262,6 +363,11 @@ header div{
     height: 100%;
 }
 
+header div.header a img:hover{
+    filter: brightness(70%);
+    transition: 0.3s;
+}
+
 header div.header{
     display: flex;
     justify-content: space-between;
@@ -350,4 +456,58 @@ footer div.footer_inf a{
 footer div.footer_inf a:hover{
     color: #165373;
     transition: 0.3s; 
+}
+
+/*##########*/
+/*## CITA ##*/
+/*##########*/
+
+body#cita button{
+    margin-top: 20px;
+}
+
+body#cita input{
+    min-height: unset;
+    font-size: 20px;
+    line-height: unset;
+    width: unset;
+}
+
+body#cita div.padrecontenedor{
+    height: unset !important;
+}
+
+/*##########################*/
+/*## INFORMACION PERSONAL ##*/
+/*##########################*/
+
+body#infopac a.registro{
+    margin-top: 20px;
+}
+
+body#infopac table tr:nth-child(odd){
+    background-color: #deeaf6;
+}
+
+body#infopac table tr:nth-child(even){
+    background-color: #f6f8fc;
+}
+
+body#infopac table td:nth-child(odd){
+    text-align: right;
+    font-weight: 900;
+
+}
+
+body#infopac table td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/*RESTABLECER PASSWORD*/
+
+body#pass{
+    background-color: unset;
 }

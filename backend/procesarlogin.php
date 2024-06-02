@@ -1,11 +1,11 @@
 <?php
-//CONECTAMOS A LA BASE DE DATOS
-include_once("functions.php");
+require_once('functions.php');
+
     //SI SE PULSA INICIAR SESION:
     if (isset($_POST["login"])) {
         if (empty($_POST["DNI"]) || empty($_POST["pass"])) {
             $_SESSION['error'] = "El DNI o la contraseña son incorrectas";
-            header('Location: ../login.php');
+            header("Location: ../pages/login.php");
             exit();
         }else{
             $conexion = conectarBD();
@@ -23,12 +23,12 @@ include_once("functions.php");
                     //SI TODO ESTA CORRECTO LLEVA A PACIENTE
                     $_SESSION["DNI"]=$usuario;
                     $_SESSION["ROL"] = "PACIENTE";
-                    header("Location: ../home.php");
+                    header("Location: ../pages/index.php");
                     exit();
                 }else{
                     //CONTRASEÑA INCORRECTA PERO USUARIO CORRECTO
                     $_SESSION['error'] = "Contraseña incorrecta";
-                    header('Location: ../login.php');
+                    header("Location: ../pages/login.php");
                     exit();
                 }
             }else{
@@ -42,17 +42,17 @@ include_once("functions.php");
                         //SI TODO ESTA CORRECTO LLEVA A EMPLEADO
                         $_SESSION["DNI"]=$usuario;
                         $_SESSION["ROL"] = $registroEmpleado["EMPLE_ROL"];
-                        header ("Location: ../home.php");
+                        header("Location: ../pages/index.php");
                         exit();
                     }else{
                         $_SESSION['error'] = "Contraseña incorrecta";
-                        header('Location: ../login.php');
+                        header("Location: ../pages/login.php");
                         exit();
                     }
                 }else{
                     //USUARIO INCORRECTO
                     $_SESSION['error'] = "El usuario $usuario no se encuentra en la base de datos. Por favor introduzca un DNI válido.";
-                    header('Location: ../login.php');
+                    header("Location: ../pages/login.php");
                     exit();
                 }
             }
@@ -97,16 +97,16 @@ include_once("functions.php");
                 )VALUES('$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$medaleatorio')";
 
             if(mysqli_query($conexion,$insertarUser)){
-                header("location: ../login.php");
+                header("Location: ../pages/login.php");
             }else{
                 $_SESSION['error'] = "Contraseña incorrecta";
-                header('Location: ../registro.php');
+                header("Location: ../pages/registro.php");
                 exit();
             }
         }else{
             //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
             $_SESSION['error'] = "Contraseña incorrecta";
-            header('Location: ../registro.php');
+            header("Location: ../pages/registro.php");
             exit();
         }
     }
@@ -120,15 +120,17 @@ include_once("functions.php");
 
         $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
         $pass = mysqli_query($conexion, $selectPass);
-        $pasaOld=mysqli_fetch_row($pass);
+        $pasaOld=mysqli_fetch_row($pass)[0];
 
-        return $pasaOld[0];
+        
+
+        return $pasaOld;
     }
 
     //CUANDO SE PULSA EL BOTON
     if(isset($_POST['reset'])){
         $pass = comprobarPassword();
-        if($_POST['passactual']==$pass){
+        if($pass !== false && $_POST['passactual']==$pass){
             if($_POST['pass']==$_POST['passv']){
                 $conexion = conectarBD();
                 $newPass = $_POST['pass'];
@@ -136,11 +138,14 @@ include_once("functions.php");
                 //CONSULTA QUE ACTUALIZA LA CONTRASEÑA
                 $actpass = "UPDATE PACIENTES SET PAC_PASS = '$newPass' WHERE PAC_DNI = '$dni';";
 
-                $actualizar=mysqli_query($conexion,$actpass);
-
-                $_SESSION['PASS']=$newpass;
-
-                header('location: info-personal.php');
+                if(mysqli_query($conexion,$actpass)) {
+                    $_SESSION['PASS'] = $newPass;
+                    mysqli_close($conexion);
+                    header("Location: ../pages/info-personal.php");
+                    exit();
+                } else {
+                    die("Error: " . mysqli_error($conexion));
+                }
             }else{
                 echo "<h2>Las contraseñas no coinciden</h2>";
             }

@@ -1,16 +1,17 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style/style.css">
+    <link rel="stylesheet" href="../assets/style/style.css">
     <title>Registro</title>
 </head>
 <body id="registro" class="reg">
 <!-- FORMULARIO REGISTRO -->
 <div class="padrecontenedor">
     <div class="logo">
-        <img src="assets/media/logo.png" alt="logo" height="200px">
+        <img src="../assets/media/logo.png" alt="logo" height="200px">
     </div>
     <div class="padrepeque">
         <div class="errores" id="errores">
@@ -21,7 +22,7 @@
                 }
             ?>
         </div>
-        <form method="post" action="backend/procesarlogin.php" name="registro" class="bloque">
+        <form method="post" action="../backend/procesarlogin.php" name="registro" class="bloque">
             <div class="columna1">
                 <div class="elemento-form">
                     <label>DNI:</label> <br>
@@ -78,6 +79,6 @@
         </form>
     </div>
 </div>
-<a href="login.php" class="registro blanco">Volver atras</a>
+<a href="login.php" class="registro blanco">Volver atrás</a>
 </body>
 </html>

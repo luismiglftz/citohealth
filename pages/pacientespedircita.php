@@ -8,10 +8,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style/style.css">
+    <link rel="stylesheet" href="../assets/style/style.css">
     <title>Pedir cita</title>
 </head>
 <body id="cita">
+<?php include_once "../templates/header.php"; ?>
 
 <!--FORMULARIO-->
 <div class="padrecontenedor">
@@ -34,5 +35,7 @@
         </form>
     </div>
 </div>
+<?php include_once "../templates/footer.php"; ?>
+
 </body>
 </html>

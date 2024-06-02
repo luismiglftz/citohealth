@@ -1,4 +1,5 @@
 <?php
+
     session_start();
     // FUNCION PARA CONECTAR A LA BASE DE DATOS
     function conectarBD($nombreBD = "CitoHealth", $servidor = "localhost", $usuario = "root", $password = "") {
@@ -33,10 +34,12 @@
             $_SESSION["USER_PROV"] = $registroPaciente["PAC_PROV"];
             $empleCod = $registroPaciente["EMPLE_COD"];
             //PARA SABER SU MEDICO DE CABECERA
-            $medcab = "SELECT EMPLE_NOM, EMPLE_APE, EMPLE_COD FROM EMPLEADOS WHERE EMPLE_COD = $empleCod;";
+            $medcab = "SELECT EMPLE_NOM, EMPLE_APE, EMPLE_COD FROM EMPLEADOS WHERE EMPLE_COD = '$empleCod';";
             $infomed=mysqli_query($conexion,$medcab);
             $medcab=mysqli_fetch_row($infomed);
             $_SESSION["MED_CAB"] = $medcab[0] . " " . $medcab[1] . " (" . $medcab[2] . ")";
+            $_SESSION["EMPLE_COD"] = $medcab[2];
+            
         }else{
             // NO EXISTE EL PACIENTE, BUSCAR EN EMPLEADOS
             $compdniEmpleado = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
@@ -64,7 +67,14 @@
     
     function verificarSesion() {
         if (!isset($_SESSION["DNI"])) {
-            header('Location: login.php');
+            header('Location: ../pages/login.php');
+            exit();
+        }
+    }
+
+    function verificarSesionIndex() {
+        if (!isset($_SESSION["DNI"])) {
+            header('Location: pages/login.php');
             exit();
         }
     }
@@ -96,7 +106,7 @@
 
             mysqli_close($conexion);
 
-            header('Location: ver-citas.php');
+            header('Location: pacientevercitas.php');
             exit;
         }
 
@@ -123,6 +133,37 @@
     
         return $citas;
     }
+
+    function obtenerTratamientos() {
+        $conexion = conectarBD();
+        $dni = $_SESSION['DNI'];
+    
+        $tratamientosQuery = "SELECT T.TRAT_COD, T.TRAT_FEC, T.EMPLE_COD, T.TRAT_DESC, E.EMPLE_NOM, E.EMPLE_APE FROM TRATAMIENTOS T JOIN EMPLEADOS E ON T.EMPLE_COD = E.EMPLE_COD WHERE T.PAC_DNI = '$dni';";
+    
+        $tratamientosResult = mysqli_query($conexion, $tratamientosQuery);
+        $tratamientos = [];
+    
+        while ($tratamiento = mysqli_fetch_assoc($tratamientosResult)) {
+            $tratCod = $tratamiento['TRAT_COD'];
+            
+            // Obtener los fármacos asociados a este tratamiento
+            $farmacosQuery = "SELECT F.FARM_NOM FROM TRATAMIENTOS_FARMACOS TF JOIN FARMACOS F ON TF.FARM_COD = F.FARM_COD WHERE TF.TRAT_COD = '$tratCod';";
+            
+            $farmacosResult = mysqli_query($conexion, $farmacosQuery);
+            $farmacos = [];
+    
+            while ($farmaco = mysqli_fetch_assoc($farmacosResult)) {
+                $farmacos[] = $farmaco['FARM_NOM'];
+            }
+    
+            $tratamiento['FARMACOS'] = implode(', ', $farmacos);
+            $tratamientos[] = $tratamiento;
+        }
+    
+        mysqli_close($conexion);
+        return $tratamientos;
+    }
+    
 
 
 ?>
