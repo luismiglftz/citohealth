@@ -38,20 +38,25 @@ body{
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-
+    padding-top: 50px;
 }
 
-body .padrecontenedor :first-child{
+body div.padrecontenedor > :nth-child(1){
+    margin-top: 100px;
 }
 
 body .padrecontenedor{
+height: -webkit-fill-available;
 }
 
 
 html{
     background-color: #aac2ce;
-height: -webkit-fill-available;
+    height: 100%;
+}
 
+input:read-only{
+    background-color: lightgrey;
 }
 
 /*############*/
@@ -436,7 +441,7 @@ div.footer{
     width: 100%;
     /* z-index: 0; */
     position: absolute;
-    bottom: -100px;
+    bottom: -25%;
     left: 0;
     /* right: 0; */
     background-color: #6d9db5;
@@ -504,6 +509,11 @@ body#cita div.padrecontenedor{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+#infopers div.padrecontenedor > :nth-child(1){
+    margin-top: 0px !important;
+}
+
+
 #infopers h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -558,4 +568,162 @@ body#cita div.padrecontenedor{
 
 #infopers .reset-password:hover {
     text-decoration: underline;
+}
+
+
+/*#############################*/
+/*## INFORMACION TRATAMIENTO ##*/
+/*#############################*/
+
+body#info div.padrecontenedor > :nth-child(1){
+    margin-top: 0px !important;
+}
+
+body#info table{
+    margin-bottom: 50px;
+}
+
+body#info table tr:nth-child(odd){
+    background-color: #deeaf6;
+}
+
+body#info table tr:nth-child(even){
+    background-color: #f6f8fc;
+}
+
+body#info table tr:nth-child(1) td{
+    text-align: left;
+    font-weight: 900;
+
+}
+
+body#info table td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+
+
+body#infocitas a.registro{
+    margin-top: 20px;
+}
+
+body#infocitas table tr:nth-child(odd){
+    background-color: #deeaf6;
+}
+
+body#infocitas table tr:nth-child(even){
+    background-color: #f6f8fc;
+}
+
+body#infocitas table tr:nth-child(1) td{
+    text-align: left;
+    font-weight: 900;
+
+}
+
+body#infocitas table td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+
+/*####################*/
+/*## CREAR PACIENTE ##*/
+/*####################*/
+
+#registroPAC {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+#registroPAC .padrecontenedor {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#registroPAC div.padrecontenedor > :nth-child(1){
+    margin-top: 0px !important;
+}
+
+
+#registroPAC h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#registroPAC .form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.linea_form {
+    margin-bottom: 15px;
+}
+
+#registroPAC label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#registroPAC input[type="text"],
+#registroPAC input[type="email"],
+#registroPAC input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+    width: 300px;
+}
+
+#registroPAC .btn-submit {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#registroPAC .reset-password {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #007bff;
+    margin-top: 10px;
+}
+
+#registroPAC .reset-password:hover {
+    text-decoration: underline;
+}
+
+
+
+/*#######################*/
+/*## ELIMINAR PACIENTE ##*/
+/*#######################*/
+.eliminarpaciente{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eliminarpaciente button.eliminar{
+    width: 300px !important;
+    margin-top: 50px;
 }

@@ -77,18 +77,18 @@ require_once('functions.php');
 
 
         // DEFINIMOS TODAS LAS VARIABLES PARA FACIL ACCESO
-        $DNI=$_POST['DNI'];//
-        $NOM=$_POST['name'];//
-        $APE=$_POST['ape'];//
-        $TEL=$_POST['tel'];//
-        $MAIL=$_POST['mail'];//
+        $DNI=$_POST['DNI'];
+        $NOM=$_POST['name'];
+        $APE=$_POST['ape'];
+        $TEL=$_POST['tel'];
+        $MAIL=$_POST['mail'];
         $PASS=$_POST['pass'];
         $PASSV=$_POST['passv'];
-        $POSTAL=$_POST['pos'];//
-        $DIR=$_POST['dir'];//
-        $CIU=$_POST['ciu'];//
-        $PROV=$_POST['prov'];//
-        $NAC=$_POST['nac'];//
+        $POSTAL=$_POST['pos'];
+        $DIR=$_POST['dir'];
+        $CIU=$_POST['ciu'];
+        $PROV=$_POST['prov'];
+        $NAC=$_POST['nac'];
 
         //SI LAS DOS CONTRASEÑAS SON IGUALES HACE LA CONSULTA DE INSERTAR
         if($PASS==$PASSV){
@@ -107,6 +107,45 @@ require_once('functions.php');
             //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
             $_SESSION['error'] = "Contraseña incorrecta";
             header("Location: ../pages/registro.php");
+            exit();
+        }
+    }
+
+    if (isset($_POST['registerpac'])) {
+        $conexion = conectarBD();
+
+        // DEFINIMOS TODAS LAS VARIABLES PARA FACIL ACCESO
+        $DNI=$_POST['DNI'];
+        $NOM=$_POST['nombre'];
+        $APE=$_POST['apellidos'];
+        $TEL=$_POST['telefono'];
+        $MAIL=$_POST['email'];
+        $PASS=$_POST['pass'];
+        $PASSV=$_POST['passv'];
+        $POSTAL=$_POST['codigo_postal'];
+        $DIR=$_POST['direccion'];
+        $CIU=$_POST['ciudad'];
+        $PROV=$_POST['provincia'];
+        $NAC=$_POST['fecha_nacimiento'];
+
+        obtenerDatosUsuarios();
+        $emple_cod = $_SESSION["EMPLE_COD"];
+
+        //SI LAS DOS CONTRASEÑAS SON IGUALES HACE LA CONSULTA DE INSERTAR
+        if($PASS==$PASSV){
+            $insertarUser = "INSERT INTO PACIENTES (
+                PAC_DNI, PAC_NOM, PAC_APE, PAC_COD_POSTAL, PAC_DIRECCION, PAC_CIU, PAC_PROV, PAC_TEL, PAC_MAIL, PAC_FEC_NAC, PAC_PASS, EMPLE_COD
+                )VALUES('$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$emple_cod')";
+
+            if(mysqli_query($conexion,$insertarUser)){
+                header("Location: ../pages/empleadopacientes.php");
+            }else{
+                $_SESSION['error'] = "Ha ocurrido un error";
+                exit();
+            }
+        }else{
+            //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
+            $_SESSION['error'] = "Contraseña incorrecta";
             exit();
         }
     }
