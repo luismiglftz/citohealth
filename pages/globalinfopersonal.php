@@ -12,10 +12,10 @@ obtenerDatosUsuarios();
     <link rel="stylesheet" href="../assets/style/style.css">
     <title>Información personal</title>
 </head>
-<body id="infopac">
+<body id="infopers">
 <?php include_once "../templates/header.php"; ?>
 
-<div class="padre">
+<div class="padrecontenedor">
         <h2>Actualizar Información Personal</h2>
         <form method="post" action="../backend/actualizar_informacion.php" class="form">
             <div class="linea_form">

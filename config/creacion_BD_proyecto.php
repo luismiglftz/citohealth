@@ -327,7 +327,31 @@ $insertarTRAT_FARM = "INSERT INTO TRATAMIENTOS_FARMACOS (TRAT_COD, FARM_COD)
 
 mysqli_query($conexion,$insertarTRAT_FARM);
 
-//AHORA VAMOS MEDIANTE 
+//AHORA VAMOS MEDIANTE LA API DE OPENFDA A INSERTAR DATOS DE FARMACOS PARA TENER EN LA BASE DE DATOS:
+$url = "https://api.fda.gov/drug/label.json?limit=1000";
+//OBTENEMOS EL CONTENIDO JSON DESDE LA URL PROPORCIONADA
+$json = file_get_contents($url);
+// DECODIFICAMOS EL JSON A UN ARRAY ASOCIATIVO DE PHP ASI LOS PODEMOS TRATAR COMO UN ARRAY
+$data = json_decode($json, true);
+//print_r($data);
+//GUARDAMOS LOS DATOS QUE NOS DEVUELVE LA API (RESULTS)
+$farmacos = $data['results'];
+//print_r($farmacos);
+
+// POR CADA MEDICAMENTO RECIBIDO...
+foreach ($farmacos as $farmaco) {
+    //PARA SOLO METER LOS MEDICAMENTOS QUE TIENEN DATOS
+    if (!empty($farmaco['openfda']['generic_name'][0]) && !empty($farmaco['description'][0])) {
+        // NOMBRE
+        $nombre = $farmaco['openfda']['generic_name'][0];
+        // DESCRIPCIÓN
+        $descripcion = $farmaco['description'][0];
+
+        // INSERTAMOS LOS DATOS
+        $query = "INSERT INTO FARMACOS (FARM_NOM, FARM_DESC) VALUES ('$nombre', '$descripcion')";
+        mysqli_query($conexion, $query);
+    }
+}
 
 
 //CREAMOS UN TRIGGER PARA EL RESPALDO DE LOS PACIENTES

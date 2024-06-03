@@ -1,7 +1,7 @@
 <?php
     obtenerDatosUsuarios();
 ?>
-<footer>
+<div class="footer">
     <div class="footer_sup">
         <div>
             <p>Sitio web desarrollado por: Luis Miguel Fentánez</p>
@@ -16,4 +16,4 @@
         <a href="">Aviso legal</a>
         <a href="">Política de Cookies</a>
     </div>
-</footer>
+</div>
