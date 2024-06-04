@@ -65,6 +65,35 @@
         }
         mysqli_close($conexion);
     }
+
+    function obtenerDatosPaciente($pacienteDNI){
+        $conexion = conectarBD();
+        $compdniPaciente = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$pacienteDNI';";
+        $registroPaciente = mysqli_query($conexion, $compdniPaciente);
+    
+        if ($registroPaciente = mysqli_fetch_assoc($registroPaciente)){
+            $_SESSION["USER_NOM"] = $registroPaciente["PAC_NOM"];
+            $_SESSION["USER_APE"] = $registroPaciente["PAC_APE"];
+            $_SESSION["USER_COD_POSTAL"] = $registroPaciente["PAC_COD_POSTAL"];
+            $_SESSION["USER_DIR"] = $registroPaciente["PAC_DIRECCION"];
+            $_SESSION["USER_TEL"] = $registroPaciente["PAC_TEL"];
+            $_SESSION["USER_NAC"] = $registroPaciente["PAC_FEC_NAC"];
+            $_SESSION["USER_MAIL"] = $registroPaciente["PAC_MAIL"];
+            $_SESSION["DNI"] = $registroPaciente["PAC_DNI"];
+            $_SESSION["USER_ROL"] = "PACIENTE";
+            $_SESSION["USER_CIU"] = $registroPaciente["PAC_CIU"];
+            $_SESSION["USER_PROV"] = $registroPaciente["PAC_PROV"];
+            $empleCod = $registroPaciente["EMPLE_COD"];
+            $medcab = "SELECT EMPLE_NOM, EMPLE_APE, EMPLE_COD FROM EMPLEADOS WHERE EMPLE_COD = '$empleCod';";
+            $infomed = mysqli_query($conexion, $medcab);
+            $medcab = mysqli_fetch_assoc($infomed);
+            $_SESSION["USER_MED"] = $medcab["EMPLE_NOM"];
+            $_SESSION["USER_APEMED"] = $medcab["EMPLE_APE"];
+        } else {
+            echo "Error: Paciente no encontrado.";
+            exit;
+        }
+    }
     
     function verificarSesion() {
         if (!isset($_SESSION["DNI"])) {
@@ -165,7 +194,7 @@
         return $tratamientos;
     }
 
-if (isset($_POST["submit-chg"])) {
+if (isset($_POST["submitCambios"])) {
     $conexion = conectarBD();
 
     // Obtener los datos del formulario
@@ -209,16 +238,17 @@ if (isset($_POST["submit-chg"])) {
     
 
     // Ejecutar la consulta
-    if(mysqli_query($conexion,$actpass)) {
-        $_SESSION['PASS'] = $query;
+    if(mysqli_query($conexion,$query)) {
         mysqli_close($conexion);
-        header("Location: ../pages/info-personal.php");
+        header("Location: ../pages/globalinfopersonal.php");
         exit();
     } else {
         die("Error: " . mysqli_error($conexion));
     }
 
 }
+
+
 
 
 /**********************/
@@ -228,9 +258,8 @@ if (isset($_POST["submit-chg"])) {
 function obtenerEmpleado($DNI) {
     $conexion = conectarBD();
     $selectcod = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$DNI'";
-    $result = mysqli_query($conexion, $selectcod);
-    $empleado = mysqli_fetch_assoc($result);
-    mysqli_close($conexion);
+    $resultado = mysqli_query($conexion, $selectcod);
+    $empleado = mysqli_fetch_assoc($resultado);
     return $empleado;
 }
 
@@ -238,9 +267,9 @@ function obtenerEmpleado($DNI) {
 function obtenerPacientes($empleadoCodigo) {
     $conexion = conectarBD();
     $selectpac = "SELECT * FROM PACIENTES WHERE EMPLE_COD = '$empleadoCodigo'";
-    $result = mysqli_query($conexion, $selectpac);
+    $resultado = mysqli_query($conexion, $selectpac);
     $pacientes = [];
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($resultado)) {
         $pacientes[] = $row;
     }
     mysqli_close($conexion);
@@ -266,6 +295,46 @@ if(isset($_POST['elim'])){
     mysqli_query($conexion,$eliminar);
     
     header('location: empleadopacientes.php');
+}
+
+if (isset($_POST["submitCambiosEmpleados"])) {
+    $conexion = conectarBD();
+
+    // Obtener los datos del formulario
+    $nombre = $_POST['nombre'];
+    $apellidos = $_POST['apellidos'];
+    $dni = $_POST['dni'];
+    $telefono = $_POST['telefono'];
+    $email = $_POST['email'];
+    $fechaNacimiento = $_POST['fecha_nacimiento'];
+    $codigoPostal = $_POST['codigo_postal'];
+    $direccion = $_POST['direccion'];
+    $ciudad = $_POST['ciudad'];
+    $provincia = $_POST['provincia'];
+
+    // Consulta SQL para actualizar la información del paciente
+    $query = "UPDATE PACIENTES SET 
+            PAC_NOM = '$nombre', 
+            PAC_APE = '$apellidos', 
+            PAC_TEL = '$telefono', 
+            PAC_MAIL = '$email', 
+            PAC_FEC_NAC = '$fechaNacimiento', 
+            PAC_COD_POSTAL = '$codigoPostal', 
+            PAC_DIRECCION = '$direccion', 
+            PAC_CIU = '$ciudad', 
+            PAC_PROV = '$provincia' 
+            WHERE PAC_DNI = '$pacienteDNI';";
+    
+
+    // Ejecutar la consulta
+    if(mysqli_query($conexion,$query)) {
+        mysqli_close($conexion);
+        header("Location: ../pages/empleadopacientes.php");
+        exit();
+    } else {
+        die("Error: " . mysqli_error($conexion));
+    }
+
 }
 
 ?>

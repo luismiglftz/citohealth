@@ -13,16 +13,12 @@
 </head>
 <body id="info" class="pacienteslista separar">
 <?php include_once "../templates/header.php"; ?>
-<center></center>
+<center>
 
     <?php 
     $DNI = $_SESSION['DNI'];
     $empleado = obtenerEmpleado($DNI);
 
-    if (!$empleado) {
-        echo "<h1>Error: Empleado no encontrado</h1>";
-        exit;
-    }
 
     $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
     $tienePacientes = comprobarPacientesAsignados($empleado['EMPLE_COD']);
@@ -62,6 +58,10 @@
                     <td><?php echo $paciente['PAC_DIRECCION']; ?></td>
                     <td><?php echo $paciente['PAC_CIU']; ?></td>
                     <td><?php echo $paciente['PAC_PROV']; ?></td>
+                    <!-- PARA EDITARPACIENTE -->
+                    <td>
+                        <a href="empleadoeditarpaciente.php?dnipac=<?php echo $paciente['PAC_DNI']; ?>" class="editar">Editar</a>
+                    </td>
                 </tr>
             <?php } ?>
         </table>

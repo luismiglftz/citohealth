@@ -1,7 +1,16 @@
 <?php
 include_once "../backend/functions.php";
 verificarSesion();
-obtenerDatosUsuarios();
+
+
+//RECOGEMOS LA VARIABLE QUE SE LE HA PASADO POR URL
+if (isset($_GET['dnipac'])) {
+    $pacienteDNI = $_GET['dnipac'];
+    obtenerDatosPaciente($pacienteDNI);
+} else {
+    echo "DNI del paciente no proporcionado";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,7 +19,7 @@ obtenerDatosUsuarios();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/style/style.css">
-    <title>Información personal</title>
+    <title>Información del paciente</title>
 </head>
 <body id="infopers">
 <?php include_once "../templates/header.php"; ?>
@@ -65,7 +74,7 @@ obtenerDatosUsuarios();
             </div>
         <?php } ?>
 
-        <button type="submit" name="submitCambios" class="submitCambios">Actualizar Información</button>
+        <button type="submit" name="submitCambiosEmpleados" class="submitCambios">Actualizar Información</button>
     </form>
     <a href="../pages/globalrestablecerpass.php" class="reset-password">Restablecer Contraseña</a>
 </div>
