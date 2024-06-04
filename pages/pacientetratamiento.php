@@ -15,7 +15,7 @@
 <?php include_once "../templates/header.php"; ?>
 
 <?php
-$DNI = $_SESSION['DNI'];
+$DNI = $_SESSION["DNI_SESSION"];
 $tratamientos = obtenerTratamientos($DNI);
 ?>
 

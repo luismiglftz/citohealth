@@ -16,7 +16,7 @@
 <center>
 
     <?php 
-    $DNI = $_SESSION['DNI'];
+    $DNI = $_SESSION["DNI_SESSION"];
     $empleado = obtenerEmpleado($DNI);
 
 
@@ -69,7 +69,6 @@
         <!--BOTONES-->
         <div>
             <a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a>
-            <a href="modpac.php" class="registro">Editar paciente</a>
             <a href="empleadoborrarpaciente.php" class="registro">Eliminar paciente</a>
         </div>
     </div>

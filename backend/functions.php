@@ -15,7 +15,7 @@
 
     function obtenerDatosUsuarios(){
         $conexion = conectarBD();
-        $usuario=$_SESSION["DNI"];
+        $usuario=$_SESSION["DNI_SESSION"];
         
         // Buscar primero en la tabla PACIENTES
         $compdniPaciente = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$usuario';";
@@ -57,7 +57,11 @@
                 $_SESSION["USER_ROL"] = $registroEmpleado["EMPLE_ROL"]; // DIFERENCIAR ROL
                 $_SESSION["USER_SUELDO"] = $registroEmpleado["EMPLE_SUELDO"];
                 $_SESSION["USER_PUE"] = $registroEmpleado["EMPLE_PUE"];
-                $_SESSION["DEP_COD"] = $registroEmpleado["DEP_COD"];
+                $codDepartamento = $registroEmpleado["DEP_COD"];
+                $dep = "SELECT DEP_NOM, DEP_COD FROM DEPARTAMENTOS WHERE DEP_COD = '$codDepartamento';";
+                $infoDep = mysqli_query($conexion,$dep);
+                $infoDepArray = mysqli_fetch_row($infoDep);
+                $_SESSION["USER_DEP"] = $infoDepArray[0] . " (" . $infoDepArray[1] . ") "; 
             }else{
                 //NO EXISTE EL USUARIO
                 echo "Usuario no encontrado en ninguna tabla.";
@@ -72,23 +76,23 @@
         $registroPaciente = mysqli_query($conexion, $compdniPaciente);
     
         if ($registroPaciente = mysqli_fetch_assoc($registroPaciente)){
-            $_SESSION["USER_NOM"] = $registroPaciente["PAC_NOM"];
-            $_SESSION["USER_APE"] = $registroPaciente["PAC_APE"];
-            $_SESSION["USER_COD_POSTAL"] = $registroPaciente["PAC_COD_POSTAL"];
-            $_SESSION["USER_DIR"] = $registroPaciente["PAC_DIRECCION"];
-            $_SESSION["USER_TEL"] = $registroPaciente["PAC_TEL"];
-            $_SESSION["USER_NAC"] = $registroPaciente["PAC_FEC_NAC"];
-            $_SESSION["USER_MAIL"] = $registroPaciente["PAC_MAIL"];
+            $_SESSION["PAC_NOM"] = $registroPaciente["PAC_NOM"];
+            $_SESSION["PAC_APE"] = $registroPaciente["PAC_APE"];
+            $_SESSION["PAC_COD_POSTAL"] = $registroPaciente["PAC_COD_POSTAL"];
+            $_SESSION["PAC_DIR"] = $registroPaciente["PAC_DIRECCION"];
+            $_SESSION["PAC_TEL"] = $registroPaciente["PAC_TEL"];
+            $_SESSION["PAC_NAC"] = $registroPaciente["PAC_FEC_NAC"];
+            $_SESSION["PAC_MAIL"] = $registroPaciente["PAC_MAIL"];
             $_SESSION["DNI"] = $registroPaciente["PAC_DNI"];
-            $_SESSION["USER_ROL"] = "PACIENTE";
-            $_SESSION["USER_CIU"] = $registroPaciente["PAC_CIU"];
-            $_SESSION["USER_PROV"] = $registroPaciente["PAC_PROV"];
+            $_SESSION["PAC_ROL"] = "PACIENTE";
+            $_SESSION["PAC_CIU"] = $registroPaciente["PAC_CIU"];
+            $_SESSION["PAC_PROV"] = $registroPaciente["PAC_PROV"];
+            $_SESSION["PAC_PASS"] = $registroPaciente["PAC_PASS"];
             $empleCod = $registroPaciente["EMPLE_COD"];
             $medcab = "SELECT EMPLE_NOM, EMPLE_APE, EMPLE_COD FROM EMPLEADOS WHERE EMPLE_COD = '$empleCod';";
             $infomed = mysqli_query($conexion, $medcab);
             $medcab = mysqli_fetch_assoc($infomed);
-            $_SESSION["USER_MED"] = $medcab["EMPLE_NOM"];
-            $_SESSION["USER_APEMED"] = $medcab["EMPLE_APE"];
+            $_SESSION["PAC_MED"] = $medcab["EMPLE_NOM"] . " " . $medcab["EMPLE_APE"];
         } else {
             echo "Error: Paciente no encontrado.";
             exit;
@@ -96,14 +100,14 @@
     }
     
     function verificarSesion() {
-        if (!isset($_SESSION["DNI"])) {
+        if (!isset($_SESSION["DNI_SESSION"])) {
             header('Location: ../pages/login.php');
             exit();
         }
     }
 
     function verificarSesionIndex() {
-        if (!isset($_SESSION["DNI"])) {
+        if (!isset($_SESSION["ROL_SESSION"])) {
             header('Location: pages/login.php');
             exit();
         }
@@ -114,7 +118,7 @@
         verificarSesion();
         obtenerDatosUsuarios();
 
-        $DNI = $_SESSION['DNI'];
+        $DNI = $_SESSION["DNI_SESSION"];
         $emplecod = $_SESSION['EMPLE_COD'];
         
         // Cuando se pulsa el botón enviar se insertan los datos
@@ -144,7 +148,7 @@
 
     function obtenerCitas() {
         $conexion = conectarBD();
-        $dni = $_SESSION['DNI'];
+        $dni = $_SESSION["DNI_SESSION"];
     
         $compcita = "SELECT * FROM CITAS WHERE PAC_DNI = '$dni';";
         $vercita = mysqli_query($conexion, $compcita);
@@ -166,7 +170,7 @@
 
     function obtenerTratamientos() {
         $conexion = conectarBD();
-        $dni = $_SESSION['DNI'];
+        $dni = $_SESSION["DNI_SESSION"];
     
         $tratamientosQuery = "SELECT T.TRAT_COD, T.TRAT_FEC, T.EMPLE_COD, T.TRAT_DESC, E.EMPLE_NOM, E.EMPLE_APE FROM TRATAMIENTOS T JOIN EMPLEADOS E ON T.EMPLE_COD = E.EMPLE_COD WHERE T.PAC_DNI = '$dni';";
     
@@ -196,7 +200,6 @@
 
 if (isset($_POST["submitCambios"])) {
     $conexion = conectarBD();
-
     // Obtener los datos del formulario
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
@@ -206,11 +209,11 @@ if (isset($_POST["submitCambios"])) {
     $fechaNacimiento = $_POST['fecha_nacimiento'];
     $codigoPostal = $_POST['codigo_postal'];
     $direccion = $_POST['direccion'];
-    $ciudad = $_POST['ciudad'];
-    $provincia = $_POST['provincia'];
-
     // Consulta SQL para actualizar la información del paciente
-    if($_SESSION["ROL"]=="PACIENTE"){
+    if($_SESSION["ROL_SESSION"]=="PACIENTE"){
+        //ESTAS DOS SON EXCLUSIVAS DE PACIENTES
+        $ciudad = $_POST['ciudad'];
+        $provincia = $_POST['provincia'];
         $query = "UPDATE PACIENTES SET 
                 PAC_NOM = '$nombre', 
                 PAC_APE = '$apellidos', 
@@ -224,16 +227,14 @@ if (isset($_POST["submitCambios"])) {
               WHERE PAC_DNI = '$dni';";
     }else{
         $query = "UPDATE EMPLEADOS SET 
-                PAC_NOM = '$nombre', 
-                PAC_APE = '$apellidos', 
-                PAC_TEL = '$telefono', 
-                PAC_MAIL = '$email', 
-                PAC_FEC_NAC = '$fechaNacimiento', 
-                PAC_COD_POSTAL = '$codigoPostal', 
-                PAC_DIRECCION = '$direccion', 
-                PAC_CIU = '$ciudad', 
-                PAC_PROV = '$provincia' 
-              WHERE PAC_DNI = '$dni';";
+                EMPLE_NOM = '$nombre', 
+                EMPLE_APE = '$apellidos', 
+                EMPLE_TEL = '$telefono', 
+                EMPLE_MAIL = '$email', 
+                EMPLE_NAC = '$fechaNacimiento', 
+                EMPLE_COD_POSTAL = '$codigoPostal', 
+                EMPLE_DIR = '$direccion'
+              WHERE EMPLE_DNI = '$dni';";
     }
     
 
@@ -311,6 +312,7 @@ if (isset($_POST["submitCambiosEmpleados"])) {
     $direccion = $_POST['direccion'];
     $ciudad = $_POST['ciudad'];
     $provincia = $_POST['provincia'];
+    $pass = $_POST['password'];
 
     // Consulta SQL para actualizar la información del paciente
     $query = "UPDATE PACIENTES SET 
@@ -322,8 +324,9 @@ if (isset($_POST["submitCambiosEmpleados"])) {
             PAC_COD_POSTAL = '$codigoPostal', 
             PAC_DIRECCION = '$direccion', 
             PAC_CIU = '$ciudad', 
-            PAC_PROV = '$provincia' 
-            WHERE PAC_DNI = '$pacienteDNI';";
+            PAC_PROV = '$provincia', 
+            PAC_PASS = '$pass'
+            WHERE PAC_DNI = '$dni';";
     
 
     // Ejecutar la consulta
@@ -333,6 +336,8 @@ if (isset($_POST["submitCambiosEmpleados"])) {
         exit();
     } else {
         die("Error: " . mysqli_error($conexion));
+        header("Location: ../pages/empleadopacientes.php");
+
     }
 
 }

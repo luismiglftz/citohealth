@@ -17,6 +17,12 @@ obtenerDatosUsuarios();
 <div class="padrecontenedor">
     <h2>Actualizar Información Personal</h2>
     <form method="post" action="" name="chg_info" class="form">
+        <?php if($_SESSION["ROL_SESSION"] == 'EMPLEADO' ||$_SESSION["ROL_SESSION"] == 'ADMIN' ){ ?>
+            <div class="linea_form">
+                <label for="cod">Código de empleado:</label>
+                <input type="text" id="cod" name="cod" value="<?php echo $_SESSION["EMPLE_COD"]; ?>" readonly>
+            </div>
+        <?php } ?>
 
         <div class="linea_form">
             <label for="nombre">Nombre:</label>
@@ -28,7 +34,7 @@ obtenerDatosUsuarios();
         </div>
         <div class="linea_form">
             <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" value="<?php echo $_SESSION["DNI"]; ?>" readonly>
+            <input type="text" id="dni" name="dni" value="<?php echo $_SESSION["DNI_SESSION"]; ?>" readonly>
         </div>
         <div class="linea_form">
             <label for="telefono">Teléfono:</label>
@@ -50,20 +56,35 @@ obtenerDatosUsuarios();
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion" value="<?php echo $_SESSION["USER_DIR"]; ?>" required>
         </div>
-        <div class="linea_form">
-            <label for="ciudad">Ciudad:</label>
-            <input type="text" id="ciudad" name="ciudad" value="<?php echo $_SESSION["USER_CIU"]; ?>" required>
-        </div>
-        <div class="linea_form">
-            <label for="provincia">Provincia:</label>
-            <input type="text" id="provincia" name="provincia" value="<?php echo $_SESSION["USER_PROV"]; ?>" required>
-        </div>
-        <?php if ($_SESSION["ROL"] == 'PACIENTE'){ ?>
+
+        <?php if ($_SESSION["ROL_SESSION"] == 'PACIENTE'){ ?>
+            <div class="linea_form">
+                <label for="ciudad">Ciudad:</label>
+                <input type="text" id="ciudad" name="ciudad" value="<?php echo $_SESSION["USER_CIU"]; ?>" required>
+            </div>
+            <div class="linea_form">
+                <label for="provincia">Provincia:</label>
+                <input type="text" id="provincia" name="provincia" value="<?php echo $_SESSION["USER_PROV"]; ?>" required>
+            </div>
             <div class="linea_form">
                 <label for="medico_cabecera">Médico de Cabecera:</label>
                 <input type="text" id="medico_cabecera" name="medico_cabecera" value="<?php echo $_SESSION["MED_CAB"]; ?>" readonly>
             </div>
+        <?php }elseif($_SESSION["ROL_SESSION"] == 'EMPLEADO' || $_SESSION["ROL_SESSION"] == 'ADMIN' ){ ?>
+            <div class="linea_form">
+                <label for="provincia">Sueldo:</label>
+                <input type="text" id="sueldo" name="sueldo" value="<?php echo $_SESSION["USER_SUELDO"] . "€"; ?>" readonly>
+            </div>
+            <div class="linea_form">
+                <label for="provincia">Puesto:</label>
+                <input type="text" id="puesto" name="puesto" value="<?php echo $_SESSION["USER_PUE"]; ?>" readonly>
+            </div>
+            <div class="linea_form">
+                <label for="provincia">Departamento:</label>
+                <input type="text" id="departamento" name="departamento" value="<?php echo $_SESSION["USER_DEP"]; ?>" readonly>
+            </div>
         <?php } ?>
+
 
         <button type="submit" name="submitCambios" class="submitCambios">Actualizar Información</button>
     </form>

@@ -21,8 +21,8 @@ require_once('functions.php');
             if ($registroPaciente  = mysqli_fetch_assoc($registroPaciente)) {
                 if ($registroPaciente['PAC_PASS'] == $pass) {
                     //SI TODO ESTA CORRECTO LLEVA A PACIENTE
-                    $_SESSION["DNI"]=$usuario;
-                    $_SESSION["ROL"] = "PACIENTE";
+                    $_SESSION["DNI_SESSION"]=$usuario;
+                    $_SESSION["ROL_SESSION"] = "PACIENTE";
                     header("Location: ../pages/index.php");
                     exit();
                 }else{
@@ -40,8 +40,8 @@ require_once('functions.php');
                 if ($registroEmpleado = mysqli_fetch_assoc($registroEmpleado)) {
                     if ($registroEmpleado['EMPLE_PASS'] == $pass) {
                         //SI TODO ESTA CORRECTO LLEVA A EMPLEADO
-                        $_SESSION["DNI"]=$usuario;
-                        $_SESSION["ROL"] = $registroEmpleado["EMPLE_ROL"];
+                        $_SESSION["DNI_SESSION"]=$usuario;
+                        $_SESSION["ROL_SESSION"] = $registroEmpleado["EMPLE_ROL"];
                         header("Location: ../pages/index.php");
                         exit();
                     }else{
@@ -155,35 +155,55 @@ require_once('functions.php');
 
     function comprobarPassword(){
         $conexion = conectarBD();
-        $usuario=$_SESSION["DNI"];
+        $usuario=$_SESSION["DNI_SESSION"];
 
-        $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
-        $pass = mysqli_query($conexion, $selectPass);
-        $pasaOld=mysqli_fetch_row($pass)[0];
+        if($_SESSION["ROL_SESSION"]=="PACIENTE"){
 
-        
+            $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
+            $pass = mysqli_query($conexion, $selectPass);
+            $passOld=mysqli_fetch_row($pass)[0];
+        }else{
+            $selectPass =  "SELECT EMPLE_PASS FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
+            $pass = mysqli_query($conexion, $selectPass);
+            $passOld=mysqli_fetch_row($pass)[0];
+        }
 
-        return $pasaOld;
+        return $passOld;
     }
 
     //CUANDO SE PULSA EL BOTON
     if(isset($_POST['reset'])){
         $pass = comprobarPassword();
+        $dni = $_SESSION["DNI_SESSION"];
         if($pass !== false && $_POST['passactual']==$pass){
             if($_POST['pass']==$_POST['passv']){
                 $conexion = conectarBD();
                 $newPass = $_POST['pass'];
 
-                //CONSULTA QUE ACTUALIZA LA CONTRASEÑA
-                $actpass = "UPDATE PACIENTES SET PAC_PASS = '$newPass' WHERE PAC_DNI = '$dni';";
+                if($_SESSION["ROL_SESSION"]=="PACIENTE"){
+                    //CONSULTA QUE ACTUALIZA LA CONTRASEÑA
+                    $actpass = "UPDATE PACIENTES SET PAC_PASS = '$newPass' WHERE PAC_DNI = '$dni';";
 
-                if(mysqli_query($conexion,$actpass)) {
-                    $_SESSION['PASS'] = $newPass;
-                    mysqli_close($conexion);
-                    header("Location: ../pages/info-personal.php");
-                    exit();
-                } else {
-                    die("Error: " . mysqli_error($conexion));
+                    if(mysqli_query($conexion,$actpass)) {
+                        $_SESSION['PASS'] = $newPass;
+                        mysqli_close($conexion);
+                        header("Location: ../pages/globalinfopersonal.php");
+                        exit();
+                    } else {
+                        die("Error: " . mysqli_error($conexion));
+                    }
+                }else{
+                    //CONSULTA QUE ACTUALIZA LA CONTRASEÑA
+                    $actpass = "UPDATE EMPLEADOS SET EMPLE_PASS = '$newPass' WHERE EMPLE_DNI = '$dni';";
+
+                    if(mysqli_query($conexion,$actpass)) {
+                        $_SESSION['PASS'] = $newPass;
+                        mysqli_close($conexion);
+                        header("Location: ../pages/globalinfopersonal.php");
+                        exit();
+                    } else {
+                        die("Error: " . mysqli_error($conexion));
+                    }
                 }
             }else{
                 echo "<h2>Las contraseñas no coinciden</h2>";

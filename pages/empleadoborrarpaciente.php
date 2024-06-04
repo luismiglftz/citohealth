@@ -17,7 +17,7 @@
 <center>
     <?php
     
-        $DNI = $_SESSION['DNI'];
+        $DNI = $_SESSION["DNI_SESSION"];
         $empleado = obtenerEmpleado($DNI);
 
         if (!$empleado) {
