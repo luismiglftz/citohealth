@@ -20,9 +20,11 @@ if (empty($pacientes)) {
     echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
     exit;
 }
+
+
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,7 +32,7 @@ if (empty($pacientes)) {
     <link rel="stylesheet" href="../assets/style/style.css">
     <title>Historiales</title>
 </head>
-<body id="info" class="pacienteslista separar">
+<body id="info" class="pacienteslista separar corto">
 <?php include_once "../templates/header.php"; ?>
 <center>
 
@@ -38,75 +40,65 @@ if (empty($pacientes)) {
         
         <select name="seleccion">
         
-<?php foreach ($pacientes as $paciente){ ?>
-    
-        <option value="<?php echo $paciente['PAC_DNI']; ?>">
-            <?php echo $paciente['PAC_APE'] . ", " . $paciente['PAC_NOM'] . " (" . $paciente['PAC_DNI'] . ")"; ?>
-        </option>
-        
-    <?php } echo "</select>"?>
+        <?php foreach ($pacientes as $paciente){ ?>
+            <option value="<?php echo $paciente['PAC_DNI']; ?>">
+                <?php echo $paciente['PAC_APE'] . ", " . $paciente['PAC_NOM'] . " (" . $paciente['PAC_DNI'] . ")"; ?>
+            </option>
+        <?php } ?>
+        </select>
         <button type="submit" name="sel" value="sel" class="seleccion">Consultar este usuario</button>
     
     </form>
     <?php 
     //CUANDO PULSAMOS EL BOTON SEL:
-
     if(isset($_POST['sel'])){
-        $seleccion=$_POST['seleccion'];
+        $seleccion = $_POST['seleccion'];
+        $_SESSION['DNI_PAC_TRAT'] = $seleccion;
         
         $pacienteSeleccionado = obtenerPaciente($seleccion);
         $nombre = $pacienteSeleccionado['PAC_NOM'] . " " . $pacienteSeleccionado['PAC_APE'];
 
-        
-        $historiales = obtenerHistorialPaciente($seleccion);
-
-        $conexion = conectarBD();
-        $compdniPaciente = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$seleccion';";
-        $registroPaciente = mysqli_query($conexion, $compdniPaciente);
-        
+        $tratamientos = obtenerTratamientosPaciente($seleccion);
         ?>
-    <!--EMPEZAMOS LA TABLA DONDE IRAN ALMACENADOS LOS DATOS DE LOS PACIENTES PERTENECIENTES AL -->
-    
+        <!--EMPEZAMOS LA TABLA DONDE IRAN ALMACENADOS LOS DATOS DE LOS PACIENTES PERTENECIENTES AL -->
         <div class="padrecontenedor">
-        <h2> <?php echo $nombre ;  ?></h2>
-    <table>
-        <tr>
-            <td>Código</td>
-            <td>Paciente</td>
-            <td>Medico que lo atendió</td>
-            <td>Fecha de la visita</td>
-            <td>Descripción visita</td>
-            <td>Fármacos Recetados</td>
-        </tr>
-        <?php
-            foreach ($historiales as $historial) {
-                $tratCod = $historial['COD_HIS'];
+        <h2><?php echo $nombre; ?></h2>
+        <table>
+            <tr>
+                <td>Código</td>
+                <td>Paciente</td>
+                <td>Médico que lo atendió</td>
+                <td>Fecha del tratamiento</td>
+                <td>Descripción del tratamiento</td>
+                <td>Fármacos Recetados</td>
+            </tr>
+            <?php
+            foreach ($tratamientos as $tratamiento) {
+                $tratCod = $tratamiento['TRAT_COD'];
                 $farmacos = obtenerFarmacosTratamiento($tratCod);
             ?>
-                <!--MOSTRAMOS POR PANTALLAS LAS CITAS QUE TIENE EL EMPLEADO SELECCIONADO-->
             <tr>
-                <td> <?php echo $historial['COD_HIS']?></td>
-                <td><?php echo $nombre ?></td>
-                <td><?php echo $empleado['EMPLE_NOM'] . " " . $empleado['EMPLE_APE'] ?></td>
-                <td><?php echo $historial['HIS_FEC']?></td>
-                <td><?php echo $historial['HIS_DESC']?></td>
+                <td><?php echo $tratamiento['TRAT_COD']; ?></td>
+                <td><?php echo $nombre; ?></td>
+                <td><?php echo $empleado['EMPLE_NOM'] . " " . $empleado['EMPLE_APE']; ?></td>
+                <td><?php echo $tratamiento['TRAT_FEC']; ?></td>
+                <td><?php echo $tratamiento['TRAT_DESC']; ?></td>
                 <td>
                     <ul>
                         <?php foreach ($farmacos as $farmaco) { ?>
-                            <li><?php echo $farmaco['FARM_NOM'] . " - " . $farmaco['FARM_DESC']; ?></li>
+                        <li><?php echo $farmaco['FARM_NOM'] . " - " . $farmaco['FARM_DESC']; ?></li>
                         <?php } ?>
                     </ul>
                 </td>
-                <td><a href="../backend/functions.php?eliminarhistorial=true&hisCod=<?php echo $historial['COD_HIS'] ?>" class="enviar">Eliminar</a></td>
+                <td><a href="../backend/functions.php?eliminartratamiento=true&tratCod=<?php echo $tratamiento['TRAT_COD']; ?>" class="enviar">Eliminar</a></td>
             </tr>
-            <?php }  ?>
-    </table>
-    <!--BOTONES DE AÑADIR NUEVA CITA Y ELIMINAR CITA-->
+            <?php } ?>
+        </table>
+        <!--BOTONES DE AÑADIR NUEVO TRATAMIENTO Y ELIMINAR TRATAMIENTO-->
         <div>
             <a href="empleadotratamientoscrear.php" class="registro">Añadir nuevo tratamiento</a>
         </div>
-
-        <?php }  ?>
+        <?php } ?>
         </center>
    
         <?php include_once "../templates/footer.php"; ?>

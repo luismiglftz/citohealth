@@ -30,7 +30,7 @@ if (empty($pacientes)) {
     <link rel="stylesheet" href="../assets/style/style.css">
     <title>Historiales</title>
 </head>
-<body id="info" class="pacienteslista separar">
+<body id="info" class="pacienteslista separar corto">
 <?php include_once "../templates/header.php"; ?>
 <center>
 

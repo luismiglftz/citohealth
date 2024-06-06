@@ -535,30 +535,65 @@ session_start();
 
      }
 
+     function obtenerFarmacos() {
+        $conexion = conectarBD();
+        $consulta = "SELECT * FROM FARMACOS";
+        $resultado = mysqli_query($conexion, $consulta);
+        $farmacos = [];
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $farmacos[] = $row;
+        }
+        mysqli_close($conexion);
+        return $farmacos;
+    }
+        
+    //TODO: IMPLEMENTACION DE ORDEN, VALORES POR DEFECTO EN LA FUNCION
+    function obtenerTratamientosPaciente($dniPaciente, $order = 'TRAT_COD', $direction = 'asc') {
+        $conexion = conectarBD();
+        $consulta = "SELECT * FROM TRATAMIENTOS WHERE PAC_DNI = '$dniPaciente' ORDER BY $order $direction";
+        $resultado = mysqli_query($conexion, $consulta);
+        $tratamientos = [];
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $tratamientos[] = $row;
+        }
+        mysqli_close($conexion);
+        return $tratamientos;
+    }
+
+    function obtenerFarmacosTratamiento($tratCod) {
+        $conexion = conectarBD();
+        $consulta = "SELECT FARM_NOM, FARM_DESC FROM TRATAMIENTOS_FARMACOS 
+                     JOIN FARMACOS ON TRATAMIENTOS_FARMACOS.FARM_COD = FARMACOS.FARM_COD 
+                     WHERE TRATAMIENTOS_FARMACOS.TRAT_COD = $tratCod";
+        $resultado = mysqli_query($conexion, $consulta);
+        $farmacos = [];
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $farmacos[] = $row;
+        }
+        mysqli_close($conexion);
+        return $farmacos;
+    }
+
     if (isset($_POST['creartrat'])) {
         $DNI_PAC = $_SESSION['DNI_PAC_TRAT'];
         $DNI_EMPLE = $_SESSION['DNI_SESSION'];
         $conexion = conectarBD();
         
-        // REALIZAMOS UNA CONSULTA PARA CONSEGUIR EL CODIGO DE EMPLEADO:
+        //CODIGO DE EMPLEADO:
         $selectcod = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$DNI_EMPLE'";
         $empleados = mysqli_query($conexion, $selectcod);
         $infoemple = mysqli_fetch_row($empleados);
         $codemple = $infoemple[0];
     
-        // DEFINIMOS TODAS LAS VARIABLES PARA FACIL ACCESO
         $DESC = $_POST['desc'];
         $FEC = $_POST['fec'];
         $farmacos = $_POST['farmacos'];
     
-        // POR ULTIMO INSERTAMOS EL NUEVO TRATAMIENTO EN EL REGISTRO DE CITAS
+        //SE INSERTA NUEVO TRATAMIENTO
         $insertarHIS = "INSERT INTO TRATAMIENTOS (TRAT_FEC, PAC_DNI, EMPLE_COD, TRAT_DESC) 
                         VALUES ('$FEC', '$DNI_PAC', '$codemple', '$DESC')";
         // INICIA LA CONSULTA
         mysqli_query($conexion, $insertarHIS);
-    
-        // OBTENEMOS EL ID DEL TRATAMIENTO INSERTADO
-        $tratCod = mysqli_insert_id($conexion);
     
         // INSERTAMOS LOS FÁRMACOS EN LA TABLA RELACIONAL
         foreach ($farmacos as $farmaco) {
@@ -571,20 +606,29 @@ session_start();
         header('location: ../pages/empleadotratamientosver.php');
     }
 
-    function obtenerFarmacos() {
+       //FUNCION PARA ELIMINAR LA CITA DE LA FILA
+       function eliminarTrat($tratCod) {
         $conexion = conectarBD();
-        $consulta = "SELECT * FROM FARMACOS";
-        $resultado = mysqli_query($conexion, $consulta);
-        return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+        $eliminarFarmacos = "DELETE FROM TRATAMIENTOS_FARMACOS WHERE TRAT_COD = '$tratCod'";
+        $eliminarTratamiento = "DELETE FROM TRATAMIENTOS WHERE TRAT_COD = '$tratCod'";
+        
+        if (mysqli_query($conexion, $eliminarFarmacos) && mysqli_query($conexion, $eliminarTratamiento)) {
+            mysqli_close($conexion);
+            return true;
+        } else {
+            mysqli_close($conexion);
+            return false;
+        }
     }
 
-    function obtenerFarmacosTratamiento($tratCod) {
-        $conexion = conectarBD();
-        $consulta = "SELECT FARMACOS.FARM_NOM, FARMACOS.FARM_DESC FROM TRATAMIENTOS_FARMACOS 
-                     JOIN FARMACOS ON TRATAMIENTOS_FARMACOS.FARM_COD = FARMACOS.FARM_COD 
-                     WHERE TRATAMIENTOS_FARMACOS.TRAT_COD = $tratCod";
-        $resultado = mysqli_query($conexion, $consulta);
-        return mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+    // SI SE LLEGA A LA URL CON ELIMINARCITA
+    if (isset($_GET['eliminartratamiento'])) {
+        $tratCod = $_GET['tratCod'];
+        if (eliminarTrat($tratCod)) {
+            header('location: ../pages/empleadotratamientosver.php');
+        } else {
+            echo "Error al eliminar la cita.";
+        }
     }
     
     

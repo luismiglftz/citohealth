@@ -33,7 +33,7 @@ if (empty($pacientes)) {
 </head>
 <?php include_once "../templates/header.php"; ?>
 
-<body id="info" class="pacienteslista separar">
+<body id="info" class="pacienteslista separar corto">
     <center>
     <form method="post" action="" name="select_paciente" class="bloque">
         <select name="seleccion">

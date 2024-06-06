@@ -14,7 +14,7 @@ $farmacos = obtenerFarmacos();
     <link rel="stylesheet" href="../assets/style/style.css">
     <title>Crear tratamiento</title>
 </head>
-<body id="info" class="pacienteslista separar">
+<body id="info corto" class="pacienteslista separar">
 <?php include_once "../templates/header.php"; ?>
 
 <!--FORMULARIO DE CREACION:-->
