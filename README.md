@@ -1,2 +1,0 @@
-# citohealth
-Proyecto integrado DAW
