@@ -13,4 +13,6 @@
             <a href="ver_citas.php">ADMIN</a> 
         <?php } ?>
     <?php } ?>
+    
+    <input type="text" id="barraBusqueda" onkeyup="Buscar()">
 </nav>

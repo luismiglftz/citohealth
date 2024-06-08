@@ -23,15 +23,18 @@
             <div class="columna1">
             <div class="elemento-form">
                     <label>Contraseña actual:</label> <br>
-                    <input type="password" name="passactual" required />
+                    <input type="password" name="passactual" required id="huh"/>
+                    <button type="button" id="togglePasswordButton" onclick="mostrarPass(this)">
+                        <img src="../assets/media/ojo_cerrado.svg" id="mostrarPass">
+                    </button>
                 </div>
                 <div class="elemento-form">
                     <label>Contraseña:</label> <br>
-                    <input type="password" name="pass" required />
+                    <input type="password" name="pass" required /><img src="../assets/media/ojo_cerrado.svg" id="mostrarPass" onclick="mostrarPass(this)">
                 </div>
                 <div class="elemento-form">
                     <label>Confirmar contraseña:</label> <br>
-                    <input type="password" name="passv" required />
+                    <input type="password" name="passv" required /><img src="../assets/media/ojo_cerrado.svg" id="mostrarPass" onclick="mostrarPass(this)">
                 </div>
                 <button type="submit" name="reset" value="reset" class="botonreg">Restablecer</button>
             </div>
