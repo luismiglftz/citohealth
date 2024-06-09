@@ -61,14 +61,21 @@
         <div class="linea_form">
             <label for="pass">Contraseña:</label>
             <input type="password" id="pass" name="pass" required>
+            <div class="mostrarPass">
+                <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+            </div>
         </div>
         <div class="linea_form">
             <label for="passv">Confirmar contraseña:</label>
             <input type="password" id="passv" name="passv" required>
+            <div class="mostrarPass">
+                <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+            </div>
         </div>
         <button type="submit" name="registerpac" value="registerpac" class="botonreg">Registrar paciente</button>
     </form>
     <?php include_once "../templates/footer.php"; ?>
+    <script src="../assets/js/functions.js"></script>
 
 </body>
 </html>

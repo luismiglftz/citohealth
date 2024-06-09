@@ -1,8 +1,9 @@
 //todo: add funcionalidades
 
+//PARAMETRIZAR LAS CONSULTAS PARA EVITAR INYECCIONES SQL
+
 //ALERT CON CONFIRMAR
 
-//BOTON MOSTRAR CONTRASEÑA
 
 var actual = 1;
 var tdsPorPagina = 4;
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //MOSTRAR PASSWORD
 //FIX: NO FUNCIONA INTENTAR SOLUCIONAR
 function mostrarPass(elemento) {
-    var contrasenaInput = elemento.getElementById("huh"); //RECOGEMOS EL ELEMENTO ANTERIOR (INPUT)
+    var contrasenaInput = elemento.closest("div").parentElement.closest("div").querySelector('input[type="password"], input[type="text"]'); //RECOGEMOS EL ELEMENTO ANTERIOR (INPUT)
 
     if (contrasenaInput.type === "password") {
         contrasenaInput.type = "text";
@@ -123,6 +124,14 @@ function mostrarPass(elemento) {
     }
 }
 
+//PARA IMPLEMENTAR EN UN FUTURO
+function confirmar() {
+    if (confirm("¿Está seguro que desea continuar?")) {
+
+    } else {
+
+    }
+}
 
 
 

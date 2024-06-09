@@ -156,16 +156,25 @@ require_once('functions.php');
     function comprobarPassword(){
         $conexion = conectarBD();
         $usuario=$_SESSION["DNI_SESSION"];
+        $passOld = false;
+        echo ("$usuario");
+        echo $_SESSION["ROL_SESSION"];
+
 
         if($_SESSION["ROL_SESSION"]=="PACIENTE"){
-
-            $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
-            $pass = mysqli_query($conexion, $selectPass);
-            $passOld=mysqli_fetch_row($pass)[0];
+            $selectPass = "SELECT PAC_PASS FROM PACIENTES WHERE PAC_DNI = '$usuario';";
         }else{
-            $selectPass =  "SELECT EMPLE_PASS FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
-            $pass = mysqli_query($conexion, $selectPass);
-            $passOld=mysqli_fetch_row($pass)[0];
+            $selectPass = "SELECT EMPLE_PASS FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
+        }
+
+        $pass = mysqli_query($conexion, $selectPass);
+        if (!$pass) {
+            die("ERROR: " . mysqli_error($conexion));
+        } else {
+            $passwd = mysqli_fetch_assoc($pass);
+            if ($passwd) {
+                $passOld = $passwd['PAC_PASS'] ?? $passwd['EMPLE_PASS'];
+            }
         }
 
         return $passOld;

@@ -792,6 +792,7 @@ input#barraBusqueda{
     background-size: 22px;
     background-color: white;
     border-radius: 10px;
+    margin: 0px !important;
 }
 
 input#barraBusqueda:focus{
@@ -845,4 +846,20 @@ div.desplazamientoTablas img:first-of-type{
 div.desplazamientoTablas img:first-of-type:hover{
     height: 41px;
     filter: contrast(0.9);
+}
+
+/*###############**#######*/
+/*## MOSTRAR CONTRASEÑA ##*/
+/*########################*/
+
+div.mostrarPass{
+    display: flex;
+}
+
+div.mostrarPass input.mostrarPass{
+    display: flex;
+    width: 15px;
+    margin: 0px !important;
+    margin-right: 5px !important;
+    filter: saturate(0);
 }

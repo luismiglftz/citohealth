@@ -36,6 +36,6 @@
     </div>
 </div>
 <?php include_once "../templates/footer.php"; ?>
-
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>

@@ -69,10 +69,16 @@
                 <div class="elemento-form">
                     <label>Contraseña:</label> <br>
                     <input type="password" name="pass" required />
+                    <div class="mostrarPass">
+                        <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+                    </div>
                 </div>
                 <div class="elemento-form">
                     <label>Confirmar contraseña:</label> <br>
                     <input type="password" name="passv" required />
+                    <div class="mostrarPass">
+                        <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+                    </div>
                 </div>
             </div>        
             <button type="submit" name="register" value="register" class="botonreg">Registrarse</button>
@@ -80,5 +86,7 @@
     </div>
 </div>
 <a href="login.php" class="registro blanco">Volver atrás</a>
+
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>

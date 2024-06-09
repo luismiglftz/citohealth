@@ -29,6 +29,9 @@
                 <div class="elemento-form">
                     <label>Contraseña:</label> <br>
                     <input type="password" name="pass" required />
+                    <div class="mostrarPass">
+                        <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+                    </div>
                 </div>
                 <button type="submit" name="login" value="login" class="botonlog">Iniciar sesión</button>
             </form>
@@ -39,4 +42,5 @@
         </div>
     </div>
 </body>
+<script src="../assets/js/functions.js"></script>
 </html>

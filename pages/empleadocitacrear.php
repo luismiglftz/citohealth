@@ -12,6 +12,7 @@ verificarSesion();
     <title>Crear cita</title>
 </head>
 <body id="cita" class="pacienteslista separar">
+<?php include_once "../templates/header.php"; ?>
 <div class="padrecontenedor crearpac">
     <form method="post" action="" name="inicio_sesion" class="bloque">
         <table>
@@ -49,5 +50,12 @@ verificarSesion();
                     <button type="submit" name="crearCita" value="crearCita" class="botonreg">Crear cita</button>
                 </td>
             </tr>
+</table>
+</form>
+</div>
+
+
+            <?php include_once "../templates/footer.php"; ?>
+            <script src="../assets/js/functions.js"></script>
 </body>
 </html>

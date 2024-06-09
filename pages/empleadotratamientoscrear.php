@@ -55,6 +55,7 @@ $farmacos = obtenerFarmacos();
             <?php include_once "../templates/footer.php"; ?>
     </form>
 </div>
-
+<?php include_once "../templates/footer.php"; ?>
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>

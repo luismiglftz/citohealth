@@ -74,6 +74,7 @@
     </div>
     </center>
     
-<?php include_once "../templates/footer.php"; ?>
+    <?php include_once "../templates/footer.php"; ?>
+    <script src="../assets/js/functions.js"></script>
 </body>
 </html>
