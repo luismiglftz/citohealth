@@ -15,11 +15,7 @@ $_SESSION['codemple'] = $empleado['EMPLE_COD'];
 
 $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
 
-if (empty($pacientes)) {
-    echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
-    echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +31,16 @@ if (empty($pacientes)) {
 
 <body id="info" class="pacienteslista separar corto">
     <center>
+        <?php
+        //SI NO HAY NINGUN PACIENTE A SU NOMBRE SE PARA LA CARGA DE LA PAGINA Y TE PERMITE CREAR UN NUEVO PACIENTE
+            if (empty($pacientes)) {
+                echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
+                echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
+                
+                include_once "../templates/footer.php";
+                exit;
+            }
+        ?>
     <form method="post" action="" name="select_paciente" class="bloque">
         <select name="seleccion">
             <?php foreach ($pacientes as $paciente) { ?>

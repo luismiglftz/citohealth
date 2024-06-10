@@ -10,11 +10,7 @@
 <body id="registro" class="reg">
 <!-- FORMULARIO REGISTRO -->
 <div class="padrecontenedor">
-    <div class="logo">
-        <img src="../assets/media/logo.png" alt="logo" height="200px">
-    </div>
-    <div class="padrepeque">
-        <div class="errores" id="errores">
+<div class="errores" id="errores">
             <?php
                 if (isset($_SESSION["error"])) {
                     echo "<div id='errores' class='errores'>" . $_SESSION["error"] . "</div>";
@@ -22,6 +18,10 @@
                 }
             ?>
         </div>
+    <div class="logo">
+        <img src="../assets/media/logo.png" alt="logo" height="200px">
+    </div>
+    <div class="padrepeque">
         <form method="post" action="../backend/procesarlogin.php" name="registro" class="bloque">
             <div class="columna1">
                 <div class="elemento-form">
@@ -82,10 +82,10 @@
                 </div>
             </div>        
             <button type="submit" name="register" value="register" class="botonreg">Registrarse</button>
+            <a href="login.php" class="registro blanco">Volver atrás</a>
         </form>
     </div>
 </div>
-<a href="login.php" class="registro blanco">Volver atrás</a>
 
 <script src="../assets/js/functions.js"></script>
 </body>

@@ -25,11 +25,9 @@
 
     if (!$tienePacientes) {
         echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
-        ?>
-        <div>
-            <a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a>
-        </div>
-        <?php
+        echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
+        
+        include_once "../templates/footer.php";
         exit;
     }
     ?>

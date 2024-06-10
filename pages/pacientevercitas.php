@@ -22,7 +22,7 @@
     }else{
         ?>
         <div class="padrecontenedor">
-            <table>
+            <table id="tabla">
                 <tr>
                     <td>Código</td>
                     <td>Médico</td>

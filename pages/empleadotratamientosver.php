@@ -15,11 +15,6 @@ $_SESSION['codemple'] = $empleado['EMPLE_COD'];
 
 $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
 
-if (empty($pacientes)) {
-    echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
-    echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
-    exit;
-}
 
 
 ?>
@@ -35,7 +30,16 @@ if (empty($pacientes)) {
 <body id="info" class="pacienteslista separar corto">
 <?php include_once "../templates/header.php"; ?>
 <center>
-
+        <?php
+        //SI NO HAY NINGUN PACIENTE A SU NOMBRE SE PARA LA CARGA DE LA PAGINA Y TE PERMITE CREAR UN NUEVO PACIENTE
+            if (empty($pacientes)) {
+                echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
+                echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
+                
+                include_once "../templates/footer.php";
+                exit;
+            }
+        ?>
     <form method="post" action="" name="select_paciente" class="bloque">
         
         <select name="seleccion">
@@ -63,7 +67,7 @@ if (empty($pacientes)) {
         <!--EMPEZAMOS LA TABLA DONDE IRAN ALMACENADOS LOS DATOS DE LOS PACIENTES PERTENECIENTES AL -->
         <div class="padrecontenedor">
         <h2><?php echo $nombre; ?></h2>
-        <table>
+        <table id="tabla">
             <tr>
                 <td>Código</td>
                 <td>Paciente</td>

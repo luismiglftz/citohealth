@@ -227,10 +227,10 @@ $cons8 = "ALTER TABLE HISTORIAL ADD CONSTRAINT fk_med_his FOREIGN KEY (EMPLE_COD
 mysqli_query($conexion,$cons8);
 
 $cons9 = "ALTER TABLE TRATAMIENTOS_FARMACOS ADD CONSTRAINT fk_trat_farm_trat FOREIGN KEY (TRAT_COD) REFERENCES TRATAMIENTOS(TRAT_COD) ON DELETE CASCADE ON UPDATE CASCADE;";
-mysqli_query($conexion, $cons8);
+mysqli_query($conexion, $cons9);
 
 $cons10 = "ALTER TABLE TRATAMIENTOS_FARMACOS ADD CONSTRAINT fk_trat_farm_farm FOREIGN KEY (FARM_COD) REFERENCES FARMACOS(FARM_COD) ON DELETE CASCADE ON UPDATE CASCADE;";
-mysqli_query($conexion, $cons9);
+mysqli_query($conexion, $cons10);
 
 
 
@@ -349,7 +349,11 @@ foreach ($farmacos as $farmaco) {
 
         // INSERTAMOS LOS DATOS
         $query = "INSERT INTO FARMACOS (FARM_NOM, FARM_DESC) VALUES ('$nombre', '$descripcion')";
-        mysqli_query($conexion, $query);
+       if(mysqli_query($conexion, $query)){
+        
+       }else{
+        echo "Error al insertar el farmaco: " . $nombre;
+       }
     }
 }
 
