@@ -4,6 +4,14 @@ verificarSesion();
 
 // Obtener todos los fármacos
 $farmacos = obtenerFarmacos();
+
+if(isset($_GET['tratdni'])) {
+    $_SESSION['DNI_PAC_TRAT'] = $_GET['tratdni'];
+
+} else {
+    echo "DNI del paciente no proporcionado";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">

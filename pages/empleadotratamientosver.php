@@ -63,6 +63,7 @@ $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
         $nombre = $pacienteSeleccionado['PAC_NOM'] . " " . $pacienteSeleccionado['PAC_APE'];
 
         $tratamientos = obtenerTratamientosPaciente($seleccion);
+
         ?>
         <!--EMPEZAMOS LA TABLA DONDE IRAN ALMACENADOS LOS DATOS DE LOS PACIENTES PERTENECIENTES AL -->
         <div class="padrecontenedor">
@@ -74,7 +75,7 @@ $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
                 <td>Médico que lo atendió</td>
                 <td>Fecha del tratamiento</td>
                 <td>Descripción del tratamiento</td>
-                <td>Fármacos Recetados</td>
+                <td>Receta</td>
             </tr>
             <?php
             foreach ($tratamientos as $tratamiento) {
@@ -98,9 +99,14 @@ $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
             </tr>
             <?php } ?>
         </table>
+        <div class="desplazamientoTablas" id="despTablas">
+            <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
+            <p id="infoPagina"></p>
+            <img src="../assets/media/flecha.png" onclick="siguientePagina()">
+        </div>
         <!--BOTONES DE AÑADIR NUEVO TRATAMIENTO Y ELIMINAR TRATAMIENTO-->
         <div>
-            <a href="empleadotratamientoscrear.php" class="registro">Añadir nuevo tratamiento</a>
+            <a href="empleadotratamientoscrear.php?tratdni=<?php echo $seleccion?>" class="registro">Añadir nuevo tratamiento</a>
         </div>
         <?php } ?>
         </center>

@@ -172,14 +172,15 @@ session_start();
         verificarSesion();
         obtenerDatosUsuarios();
 
-        $DNI = $_SESSION["DNI_SESSION"];
-        $emplecod = $_SESSION['EMPLE_COD'];
         
         //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
-        if (isset($_POST['enviar'])) {
+        if (isset($_POST['enviarCita'])) {
             $fec = $_POST['fec'];
             $afec = $_POST['afec'];
             $tipo = $_POST['tipo'];
+            obtenerDatosUsuarios();
+            $DNI = $_SESSION["DNI_SESSION"];
+            $emplecod = $_SESSION['EMPLE_COD'];
 
             $conexion = conectarBD();
 
@@ -197,6 +198,33 @@ session_start();
         }
 
     }
+
+    //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
+    if (isset($_POST['enviarCitaEmple'])) {
+        $conexion = conectarBD();
+        $fec = $_POST['fec'];
+        $afec = $_POST['afec'];
+        $tipo = $_POST['tipo'];
+        
+        $DNI = $_SESSION['DNI_PAC_CIT'];
+        obtenerDatosUsuarios();
+        $emplecod = $_SESSION['EMPLE_COD'];
+
+        
+
+        $insertarCIT = "INSERT INTO CITAS (PAC_DNI, EMPLE_COD, CITA_FEC, CITA_AFEC, CITA_TIPO) 
+                        VALUES ('$DNI', '$emplecod', '$fec', '$afec', '$tipo');";
+
+        if (!mysqli_query($conexion, $insertarCIT)) {
+            die("Error al insertar la cita: " . mysqli_error($conexion));
+        }
+
+        mysqli_close($conexion);
+
+        header('Location: empleadocitaver.php');
+        exit;
+    }
+
 
     /*###-------------------------####*/
     /*##- OBTENER LISTADO DE CITAS -##*/
@@ -658,9 +686,9 @@ session_start();
     }
         
     //TODO: IMPLEMENTACION DE ORDEN, VALORES POR DEFECTO EN LA FUNCION
-    function obtenerTratamientosPaciente($dniPaciente, $order = 'TRAT_COD', $direction = 'asc') {
+    function obtenerTratamientosPaciente($dniPaciente) {
         $conexion = conectarBD();
-        $consulta = "SELECT * FROM TRATAMIENTOS WHERE PAC_DNI = '$dniPaciente' ORDER BY $order $direction";
+        $consulta = "SELECT * FROM TRATAMIENTOS WHERE PAC_DNI = '$dniPaciente'";
         $resultado = mysqli_query($conexion, $consulta);
         $tratamientos = [];
         while ($row = mysqli_fetch_assoc($resultado)) {
@@ -672,13 +700,15 @@ session_start();
 
     function obtenerFarmacosTratamiento($tratCod) {
         $conexion = conectarBD();
-        $consulta = "SELECT FARM_NOM, FARM_DESC FROM TRATAMIENTOS_FARMACOS 
-                     JOIN FARMACOS ON TRATAMIENTOS_FARMACOS.FARM_COD = FARMACOS.FARM_COD 
-                     WHERE TRATAMIENTOS_FARMACOS.TRAT_COD = $tratCod";
+        $consulta = "SELECT FARM_NOM, FARM_DESC 
+                        FROM FARMACOS 
+                        WHERE FARM_COD IN (SELECT FARM_COD 
+                                        FROM TRATAMIENTOS_FARMACOS 
+                                        WHERE TRAT_COD = $tratCod)";
         $resultado = mysqli_query($conexion, $consulta);
         $farmacos = [];
-        while ($row = mysqli_fetch_assoc($resultado)) {
-            $farmacos[] = $row;
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            $farmacos[] = $fila;
         }
         mysqli_close($conexion);
         return $farmacos;
@@ -700,10 +730,13 @@ session_start();
         $farmacos = $_POST['farmacos'];
     
         //SE INSERTA NUEVO TRATAMIENTO
-        $insertarHIS = "INSERT INTO TRATAMIENTOS (TRAT_FEC, PAC_DNI, EMPLE_COD, TRAT_DESC) 
+        $insertarTRAT = "INSERT INTO TRATAMIENTOS (TRAT_FEC, PAC_DNI, EMPLE_COD, TRAT_DESC) 
                         VALUES ('$FEC', '$DNI_PAC', '$codemple', '$DESC')";
         // INICIA LA CONSULTA
-        mysqli_query($conexion, $insertarHIS);
+        mysqli_query($conexion, $insertarTRAT);
+
+        //ESTO RECOGE EL ULTIMO ID CREADO
+        $tratCod = mysqli_insert_id($conexion);
     
         // INSERTAMOS LOS FÁRMACOS EN LA TABLA RELACIONAL
         foreach ($farmacos as $farmaco) {

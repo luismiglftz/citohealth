@@ -1,6 +1,7 @@
 <?php
     include "../backend/functions.php";
-    pedirCita();
+    verificarSesion();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -31,7 +32,7 @@
                 <input type="radio" name="tipo" value="1" required>Presencial en la clinica. <br>
                 <input type="radio" name="tipo" value="2" required>Desde casa. <br>
             </div>  
-            <button type="submit" name="enviar" value="enviar" class="botonlog">Solicitar cita</button>
+            <button type="submit" name="enviarCita" value="enviarCita" class="botonlog">Solicitar cita</button>
         </form>
     </div>
 </div>
