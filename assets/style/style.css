@@ -91,6 +91,10 @@ body .padrecontenedor{
     padding-bottom: 150px !important;
 }
 
+body.tratamientopac{
+    height: 100%;
+}
+
 body.corto{
     height: -webkit-fill-available !important;
 }

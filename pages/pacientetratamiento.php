@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../assets/style/style.css">
     <title>Tratamientos</title>
 </head>
-<body id="info">
+<body id="info" class="tratamientopac">
 <?php include_once "../templates/header.php"; ?>
 
 <?php

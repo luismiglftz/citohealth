@@ -109,10 +109,10 @@ $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
                 <?php } ?>
             </table>
             <div class="desplazamientoTablas" id="despTablas">
-            <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
-            <p id="infoPagina"></p>
-            <img src="../assets/media/flecha.png" onclick="siguientePagina()">
-        </div>
+                <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
+                <p id="infoPagina"></p>
+                <img src="../assets/media/flecha.png" onclick="siguientePagina()">
+            </div>
             <div>
                 <a href="empleadocitacrear.php?citadni=<?php echo $seleccion?>" class="registro">Añadir nueva cita</a>
             </div>
