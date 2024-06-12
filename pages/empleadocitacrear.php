@@ -1,6 +1,7 @@
 <?php
 include_once "../backend/functions.php";
 verificarSesion();
+
 ?>
 
 <!DOCTYPE html>
@@ -12,42 +13,37 @@ verificarSesion();
     <title>Crear cita</title>
 </head>
 <body id="cita" class="pacienteslista separar">
+<?php include_once "../templates/header.php"; ?>
+<?php 
+    if(isset($_GET['citadni'])) {
+        $_SESSION['DNI_PAC_CIT'] = $_GET['citadni'];
+
+    } else {
+        echo "DNI del paciente no proporcionado";
+        exit;
+    }
+?>
 <div class="padrecontenedor crearpac">
-    <form method="post" action="" name="inicio_sesion" class="bloque">
-        <table>
-            <tr>
-                <td>
-                    <label>Descripción: </label>
-                </td>
-                <td>
-                    <label>Fecha: </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="textarea" name="desc" required />
-                </td>
-                <td>
-                    <input type="date" value="<?php echo date("Y-m-d");?>" min="<?php echo date("Y-m-d");?>" name="fec"/>
-               </td>
-            </tr>
-                <td>
-
-                    <label for="tipo">Tipo de cita:</label> <br>
-
-                    <input type="radio" name="tipo" value="1" required>Presencial en la clinica. <br>
-
-                    <input type="radio" name="tipo" value="2" required>Desde casa. <br>
-
-                </td>
-
-                
-
+<form method="post" action="" name="pedir_cita">
+            <div class="elemento-form">
+                <label>Fecha:</label> <br>
+                <input type="date" name="fec" value="<?php echo date("Y-m-d");?>" min="<?php echo date("Y-m-d");?>" required />   
             </div>
-            <tr>
-            <td colspan="2">
-                    <button type="submit" name="crearCita" value="crearCita" class="botonreg">Crear cita</button>
-                </td>
-            </tr>
+            <div class="elemento-form">
+                <label>Motivo:</label> <br>
+                <input type="text" name="afec" required />
+            </div>
+            <div class="elemento-form">
+                <label for="tipo">Tipo de cita:</label> <br>
+                <input type="radio" name="tipo" value="1" required>Presencial en la clinica. <br>
+                <input type="radio" name="tipo" value="2" required>Desde casa. <br>
+            </div>  
+            <button type="submit" name="enviarCitaEmple" value="enviarCitaEmple" class="botonlog">Solicitar cita</button>
+        </form>
+</div>
+
+
+            <?php include_once "../templates/footer.php"; ?>
+            <script src="../assets/js/functions.js"></script>
 </body>
 </html>

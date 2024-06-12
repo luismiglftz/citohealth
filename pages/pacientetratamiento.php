@@ -20,7 +20,7 @@ $tratamientos = obtenerTratamientos($DNI);
 ?>
 
 <div class="padrecontenedor">
-    <table>
+    <table id="tabla">
         <tr>
             <th>Fecha del tratamiento</th>
             <th>Médico</th>
@@ -45,5 +45,6 @@ $tratamientos = obtenerTratamientos($DNI);
 </div>
 
 <?php include_once "../templates/footer.php"; ?>
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>

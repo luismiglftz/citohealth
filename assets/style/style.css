@@ -4,19 +4,57 @@
 /*fuentes*/
 
 @font-face {
-    font-family: 'AdobeThai';
-    src: url('fonts/AdobeThai-Regular.eot') format('eot'),
-        url('fonts/AdobeThai-Regular.woff') format('woff'),
-        url('fonts/AdobeThai-Regular.woff2') format('woff2'),
-        url('fonts/AdobeThai-Regular.ttf') format('ttf');
-    font-style: normal;
-    font-weight: normal;
-  }
-/*CAMBIAMOS TODAS LAS FUENTES*/
-h1, h2, h3, h4, p, td, th, li, label, a, input, button{
-    font-family: 'AdobeThai' !important;
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYBLACKITALIC.otf") format("opentype");
+    font-weight: 900;
+    font-style: italic;
 }
-
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYHEAVYITALIC.OTF") format("opentype");
+    font-weight: 800;
+    font-style: italic;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYLIGHTITALIC.OTF") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYMEDIUM.OTF") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYSEMIBOLDITALIC.OTF") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYTHINITALIC.OTF") format("opentype");
+    font-weight: 100;
+    font-style: italic;
+}
+@font-face {
+    font-family: "SFProDisplay";
+    src: url("../assets/fonts/SFPRODISPLAYULTRALIGHTITALIC") format("opentype");
+    font-weight: 200;
+    font-style: italic;
+}
+/*CAMBIAMOS TODAS LAS FUENTES*/
+h1, h2, h3, h4, p, td, th, li, label, a, input, button {
+    font-family: "SFProDisplay", sans-serif !important;
+}
 a{
     text-decoration: none;
     color: #dce0e2;
@@ -40,6 +78,10 @@ body{
     padding-top: 50px;
 }
 
+body#infopers{
+    margin-top: 50px !important;
+}
+
 body div.padrecontenedor > :nth-child(1){
     margin-top: 100px;
 }
@@ -61,6 +103,16 @@ html{
 
 input:read-only{
     background-color: lightgrey;
+}
+
+#errores{
+    color: red;
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    font-weight: 900;
+    font-size: 30px;
+    width: 100%;
 }
 
 /*############*/
@@ -240,7 +292,6 @@ button{
     display: flex;
     align-items: center;
     flex-direction: row;
-    height: 600px;
     margin-top: 30px;
     justify-content: space-evenly;
 }
@@ -332,17 +383,15 @@ a.registro:hover{
 }
 
 a.registro.blanco{
-    background-color: white;
-    color: #282c8c;
     transition: 0.1s linear;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
     width: 20%;
-    position: relative;
     bottom: 70px;
     padding-left: 0px;
     padding-right: 0px;
+    margin-top: 20px;
 }
 
 a.registro.blanco:hover{
@@ -543,7 +592,7 @@ body#cita div.padrecontenedor{
     margin-bottom: 5px;
 }
 
-#infopers input[type="text"],
+#infopers input[type="text"]:not(input#barraBusqueda),
 #infopers input[type="email"],
 #infopers input[type="date"] {
     width: 100%;
@@ -576,7 +625,6 @@ body#cita div.padrecontenedor{
 #infopers .reset-password:hover {
     text-decoration: underline;
 }
-
 
 /*#############################*/
 /*## INFORMACION TRATAMIENTO ##*/
@@ -638,8 +686,6 @@ body#infocitas table td{
     padding-left: 10px;
     padding-right: 10px;
 }
-
-
 
 /*####################*/
 /*## CREAR PACIENTE ##*/
@@ -719,8 +765,6 @@ body#infocitas table td{
     text-decoration: underline;
 }
 
-
-
 /*#######################*/
 /*## ELIMINAR PACIENTE ##*/
 /*#######################*/
@@ -739,4 +783,90 @@ body#infocitas table td{
 button.seleccion{
     width: unset !important;
     
+}
+
+
+/*#######################*/
+/*## BARRA DE BUSQUEDA ##*/
+/*#######################*/
+
+input#barraBusqueda{
+    width: 25px !important;
+    min-height: 23px !important;
+    font-size: 14px;
+    transition: 0.4s;
+    background: url(../media/lupa.png) no-repeat scroll 5px 5px;
+    background-size: 22px;
+    background-color: white;
+    border-radius: 10px;
+    margin: 0px !important;
+}
+
+input#barraBusqueda:focus{
+    width: 250px !important;
+    min-height: 23px !important;
+    font-size: 14px;
+    background: unset;
+    background-color: white;
+
+}
+
+img.buscar{
+    height: 20px;
+}
+
+/*###############################*/
+/*## DESPLAZAMIENTO POR TABLAS ##*/
+/*###############################*/
+div.desplazamientoTablas{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 40px;
+
+}
+
+div.desplazamientoTablas p#infoPagina{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+div.desplazamientoTablas img{
+    height: 40px;
+    filter: contrast(0.1);
+    transition: 0.2s;
+}
+
+div.desplazamientoTablas img:hover{
+    height: 41px;
+    filter: contrast(0.9);
+}
+
+div.desplazamientoTablas img:first-of-type{
+    height: 40px;
+    transform: rotate(180deg);
+    transition: 0.2s;
+}
+
+div.desplazamientoTablas img:first-of-type:hover{
+    height: 41px;
+    filter: contrast(0.9);
+}
+
+/*###############**#######*/
+/*## MOSTRAR CONTRASEÑA ##*/
+/*########################*/
+
+div.mostrarPass{
+    display: flex;
+}
+
+div.mostrarPass input.mostrarPass{
+    display: flex;
+    width: 15px;
+    margin: 0px !important;
+    margin-right: 5px !important;
+    filter: saturate(0);
 }

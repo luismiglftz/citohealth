@@ -25,17 +25,15 @@
 
     if (!$tienePacientes) {
         echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
-        ?>
-        <div>
-            <a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a>
-        </div>
-        <?php
+        echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
+        
+        include_once "../templates/footer.php";
         exit;
     }
     ?>
 
     <div class="padrecontenedor">
-        <table>
+        <table id="tabla">
             <tr>
                 <td>DNI</td>
                 <td>Nombre</td>
@@ -65,6 +63,11 @@
                 </tr>
             <?php } ?>
         </table>
+        <div class="desplazamientoTablas" id="despTablas">
+            <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
+            <p id="infoPagina"></p>
+            <img src="../assets/media/flecha.png" onclick="siguientePagina()">
+        </div>
 
         <!--BOTONES-->
         <div>
@@ -74,6 +77,9 @@
     </div>
     </center>
 <?php include_once "../templates/footer.php"; ?>
+
+
+<script src="../assets/js/functions.js"></script>
 
 </body>
 </html>

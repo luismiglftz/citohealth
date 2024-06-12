@@ -1,4 +1,14 @@
 <?php
+/* 
+        <div class="errores" id="errores">
+        <?php
+            if (isset($_SESSION["error"])) {
+                echo "<div id='errores' class='errores'>" . $_SESSION["error"] . "</div>";
+                unset($_SESSION["error"]); // LIMPIAR MENSAJE DE ERROR
+            }
+        ?>
+        </div>
+*/
     /*####-------------------------------------####*/
     /*##- CONECTAMOS A LA BASE DE DATOS FUNCION -##*/
     /*####-------------------------------------####*/
@@ -128,6 +138,33 @@ session_start();
         }
     }
 
+      # OBTENEMOS DATOS PACIENTE PASANDOLE EL DNI DEL PACIENTE
+      function obtenerDatosEmpleado($empleDNI){
+        $conexion = conectarBD();
+        $compdniEmple = "SELECT * FROM EMPLEADOS WHERE EMPLE_DNI = '$empleDNI';";
+        $registroEmpleado = mysqli_query($conexion, $compdniEmple);
+    
+        if ($registroEmpleado = mysqli_fetch_assoc($registroEmpleado)){
+            $_SESSION["EMPLE_COD_SEL"] = $registroEmpleado["EMPLE_COD"];
+            $_SESSION["EMPLE_DNI"] = $registroEmpleado["EMPLE_DNI"];
+            $_SESSION["EMPLE_NOM"] = $registroEmpleado["EMPLE_NOM"];
+            $_SESSION["EMPLE_APE"] = $registroEmpleado["EMPLE_APE"];
+            $_SESSION["EMPLE_COD_POSTAL"] = $registroEmpleado["EMPLE_COD_POSTAL"];
+            $_SESSION["EMPLE_DIR"] = $registroEmpleado["EMPLE_DIR"];
+            $_SESSION["EMPLE_TEL"] = $registroEmpleado["EMPLE_TEL"];
+            $_SESSION["EMPLE_NAC"] = $registroEmpleado["EMPLE_NAC"];
+            $_SESSION["EMPLE_MAIL"] = $registroEmpleado["EMPLE_MAIL"];
+            $_SESSION["EMPLE_ROL"] = $registroEmpleado["EMPLE_ROL"]; // DIFERENCIAR ROL
+            $_SESSION["EMPLE_SUELDO"] = $registroEmpleado["EMPLE_SUELDO"];
+            $_SESSION["EMPLE_PUE"] = $registroEmpleado["EMPLE_PUE"];
+            $_SESSION["EMPLE_DEP"] = $registroEmpleado["DEP_COD"];
+            $_SESSION["EMPLE_PASS"] = $registroEmpleado["EMPLE_PASS"];
+        } else {
+            echo "Error: Empleado no encontrado.";
+            exit;
+        }
+    }
+
     /*###------------####*/
     /*##- PEDIR CITAS -##*/
     /*####-----------####*/
@@ -135,14 +172,15 @@ session_start();
         verificarSesion();
         obtenerDatosUsuarios();
 
-        $DNI = $_SESSION["DNI_SESSION"];
-        $emplecod = $_SESSION['EMPLE_COD'];
         
         //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
-        if (isset($_POST['enviar'])) {
+        if (isset($_POST['enviarCita'])) {
             $fec = $_POST['fec'];
             $afec = $_POST['afec'];
             $tipo = $_POST['tipo'];
+            obtenerDatosUsuarios();
+            $DNI = $_SESSION["DNI_SESSION"];
+            $emplecod = $_SESSION['EMPLE_COD'];
 
             $conexion = conectarBD();
 
@@ -160,6 +198,33 @@ session_start();
         }
 
     }
+
+    //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
+    if (isset($_POST['enviarCitaEmple'])) {
+        $conexion = conectarBD();
+        $fec = $_POST['fec'];
+        $afec = $_POST['afec'];
+        $tipo = $_POST['tipo'];
+        
+        $DNI = $_SESSION['DNI_PAC_CIT'];
+        obtenerDatosUsuarios();
+        $emplecod = $_SESSION['EMPLE_COD'];
+
+        
+
+        $insertarCIT = "INSERT INTO CITAS (PAC_DNI, EMPLE_COD, CITA_FEC, CITA_AFEC, CITA_TIPO) 
+                        VALUES ('$DNI', '$emplecod', '$fec', '$afec', '$tipo');";
+
+        if (!mysqli_query($conexion, $insertarCIT)) {
+            die("Error al insertar la cita: " . mysqli_error($conexion));
+        }
+
+        mysqli_close($conexion);
+
+        header('Location: empleadocitaver.php');
+        exit;
+    }
+
 
     /*###-------------------------####*/
     /*##- OBTENER LISTADO DE CITAS -##*/
@@ -262,6 +327,8 @@ session_start();
                     EMPLE_DIR = '$direccion'
                 WHERE EMPLE_DNI = '$dni';";
         }
+
+        
         
 
         // SE EJECUTA SEA CUAL SEA EL USUARIO...
@@ -270,6 +337,51 @@ session_start();
             header("Location: ../pages/globalinfopersonal.php");
             exit();
         } else {
+            die("Error: " . mysqli_error($conexion));
+        }
+
+    }
+
+     //ACTUALIZAR INFORMACION DE LOS EMPLEADOS
+     if (isset($_POST["submitCambiosAdmin"])) {
+        $conexion = conectarBD();
+        //DATOS DEL FORMULARIO 
+        $cod = $_POST['cod'];
+        $nombre = $_POST['nombre'];
+        $apellidos = $_POST['apellidos'];
+        $dni = $_POST['dni'];
+        $telefono = $_POST['telefono'];
+        $email = $_POST['email'];
+        $fechaNacimiento = $_POST['fecha_nacimiento'];
+        $codigoPostal = $_POST['codigo_postal'];
+        $direccion = $_POST['direccion'];
+        $sueldo = $_POST['sueldo'];
+        $puesto = $_POST['puesto'];
+        $departamento = $_POST['departamento'];
+        $password = $_POST['password'];
+
+        // UPDATE EMPLEADO
+        $query = "UPDATE EMPLEADOS SET 
+                    EMPLE_NOM = '$nombre', 
+                    EMPLE_APE = '$apellidos', 
+                    EMPLE_TEL = '$telefono', 
+                    EMPLE_MAIL = '$email', 
+                    EMPLE_NAC = '$fechaNacimiento', 
+                    EMPLE_COD_POSTAL = '$codigoPostal', 
+                    EMPLE_DIR = '$direccion', 
+                    EMPLE_SUELDO = '$sueldo', 
+                    EMPLE_PUE = '$puesto', 
+                    DEP_COD = '$departamento', 
+                    EMPLE_PASS = '$password'
+                WHERE EMPLE_DNI = '$dni'";
+        
+
+        // SE EJECUTA SEA CUAL SEA EL USUARIO...
+        if(mysqli_query($conexion,$query)) {
+            mysqli_close($conexion);
+            header("Location: ../pages/adminempleados.php");
+            exit();
+        }else{
             die("Error: " . mysqli_error($conexion));
         }
 
@@ -349,6 +461,20 @@ session_start();
         mysqli_close($conexion);
         return $pacientes;
     }
+
+    // FUNCION PARA OBTENER LOS EMPLEADOS PARA EL ADMIN
+    function obtenerEmpleados() {
+        $conexion = conectarBD();
+        $selectEmple = "SELECT * FROM EMPLEADOS";
+        $resultado = mysqli_query($conexion, $selectEmple);
+        $empleados = [];
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $empleados[] = $row;
+        }
+        mysqli_close($conexion);
+        return $empleados;
+    }
+
 
     // FUNCION PARA COMPROBAR SI UN EMPLEADO TIENE PACIENTES ASIGNADOS
     function comprobarPacientesAsignados($empleadoCodigo) {
@@ -511,6 +637,18 @@ session_start();
         header('location: empleadopacientes.php');
     }
 
+    if(isset($_POST['elimEmple'])){
+        $seleccion=$_POST['seleccion'];
+        $conexion = conectarBD();
+
+        //AÑADIMOS EL CODIGO DE PACIENTE Y CON ESTE HACEMOS DELETE
+        $eliminar = "DELETE FROM EMPLEADOS WHERE  EMPLE_COD = '$seleccion'";
+        
+        mysqli_query($conexion,$eliminar);
+        
+        header('location: ../pages/adminempleados.php');
+    }
+
 
     if (isset($_POST['crearhistorial'])) {
         //GUARDAMOS LAS VARIABLES Y NOS CONECTAMOS A LA BD
@@ -548,9 +686,9 @@ session_start();
     }
         
     //TODO: IMPLEMENTACION DE ORDEN, VALORES POR DEFECTO EN LA FUNCION
-    function obtenerTratamientosPaciente($dniPaciente, $order = 'TRAT_COD', $direction = 'asc') {
+    function obtenerTratamientosPaciente($dniPaciente) {
         $conexion = conectarBD();
-        $consulta = "SELECT * FROM TRATAMIENTOS WHERE PAC_DNI = '$dniPaciente' ORDER BY $order $direction";
+        $consulta = "SELECT * FROM TRATAMIENTOS WHERE PAC_DNI = '$dniPaciente'";
         $resultado = mysqli_query($conexion, $consulta);
         $tratamientos = [];
         while ($row = mysqli_fetch_assoc($resultado)) {
@@ -562,13 +700,15 @@ session_start();
 
     function obtenerFarmacosTratamiento($tratCod) {
         $conexion = conectarBD();
-        $consulta = "SELECT FARM_NOM, FARM_DESC FROM TRATAMIENTOS_FARMACOS 
-                     JOIN FARMACOS ON TRATAMIENTOS_FARMACOS.FARM_COD = FARMACOS.FARM_COD 
-                     WHERE TRATAMIENTOS_FARMACOS.TRAT_COD = $tratCod";
+        $consulta = "SELECT FARM_NOM, FARM_DESC 
+                        FROM FARMACOS 
+                        WHERE FARM_COD IN (SELECT FARM_COD 
+                                        FROM TRATAMIENTOS_FARMACOS 
+                                        WHERE TRAT_COD = $tratCod)";
         $resultado = mysqli_query($conexion, $consulta);
         $farmacos = [];
-        while ($row = mysqli_fetch_assoc($resultado)) {
-            $farmacos[] = $row;
+        while ($fila = mysqli_fetch_assoc($resultado)) {
+            $farmacos[] = $fila;
         }
         mysqli_close($conexion);
         return $farmacos;
@@ -590,10 +730,13 @@ session_start();
         $farmacos = $_POST['farmacos'];
     
         //SE INSERTA NUEVO TRATAMIENTO
-        $insertarHIS = "INSERT INTO TRATAMIENTOS (TRAT_FEC, PAC_DNI, EMPLE_COD, TRAT_DESC) 
+        $insertarTRAT = "INSERT INTO TRATAMIENTOS (TRAT_FEC, PAC_DNI, EMPLE_COD, TRAT_DESC) 
                         VALUES ('$FEC', '$DNI_PAC', '$codemple', '$DESC')";
         // INICIA LA CONSULTA
-        mysqli_query($conexion, $insertarHIS);
+        mysqli_query($conexion, $insertarTRAT);
+
+        //ESTO RECOGE EL ULTIMO ID CREADO
+        $tratCod = mysqli_insert_id($conexion);
     
         // INSERTAMOS LOS FÁRMACOS EN LA TABLA RELACIONAL
         foreach ($farmacos as $farmaco) {

@@ -76,11 +76,16 @@ if (isset($_GET['dnipac'])) {
         <div class="linea_form">
             <label for="provincia">Contraseña:</label>
             <input type="password" id="password" name="password" value="<?php echo $_SESSION["PAC_PASS"]; ?>" required>
+            <div class="mostrarPass">
+                <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
+            </div>
         </div>
 
         <button type="submit" name="submitCambiosEmpleados" class="submitCambiosEmpleados">Actualizar Información</button>
     </form>
 </div>
 <?php include_once "../templates/footer.php"; ?>
+<script src="../assets/js/functions.js"></script>
+
 </body>
 </html>

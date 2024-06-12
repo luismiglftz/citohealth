@@ -105,7 +105,7 @@ require_once('functions.php');
             }
         }else{
             //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
-            $_SESSION['error'] = "Contraseña incorrecta";
+            $_SESSION['error'] = "Las contraseñas no coinciden";
             header("Location: ../pages/registro.php");
             exit();
         }
@@ -133,9 +133,8 @@ require_once('functions.php');
 
         //SI LAS DOS CONTRASEÑAS SON IGUALES HACE LA CONSULTA DE INSERTAR
         if($PASS==$PASSV){
-            $insertarUser = "INSERT INTO PACIENTES (
-                PAC_DNI, PAC_NOM, PAC_APE, PAC_COD_POSTAL, PAC_DIRECCION, PAC_CIU, PAC_PROV, PAC_TEL, PAC_MAIL, PAC_FEC_NAC, PAC_PASS, EMPLE_COD
-                )VALUES('$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$emple_cod')";
+            $insertarUser = "INSERT INTO PACIENTES (PAC_DNI, PAC_NOM, PAC_APE, PAC_COD_POSTAL, PAC_DIRECCION, PAC_CIU, PAC_PROV, PAC_TEL, PAC_MAIL, PAC_FEC_NAC, PAC_PASS, EMPLE_COD)
+                            VALUES('$DNI', '$NOM', '$APE', '$POSTAL', '$DIR', '$CIU', '$PROV', '$TEL', '$MAIL', '$NAC', '$PASS', '$emple_cod')";
 
             if(mysqli_query($conexion,$insertarUser)){
                 header("Location: ../pages/empleadopacientes.php");
@@ -145,27 +144,72 @@ require_once('functions.php');
             }
         }else{
             //SI SON DIFERENTES MENSAJE DE QUE NO COINCIDEN
-            $_SESSION['error'] = "Contraseña incorrecta";
+            $_SESSION['error'] = "Las contraseñas no coinciden";
             exit();
         }
     }
 
-    
-    //TODO TENGO QUE ARREGLAR ESTO!! SE HA ROTO???? =(
+    if (isset($_POST['registeremple'])) {
+        $conexion = conectarBD();
 
+        // DATOS DEL FORMULARIO
+        $nombre = $_POST['nombre'];
+        $apellidos = $_POST['apellidos'];
+        $dni = $_POST['dni'];
+        $telefono = $_POST['telefono'];
+        $email = $_POST['email'];
+        $fechaNacimiento = $_POST['fecha_nacimiento'];
+        $codigoPostal = $_POST['codigo_postal'];
+        $direccion = $_POST['direccion'];
+        $sueldo = $_POST['sueldo'];
+        $puesto = $_POST['puesto'];
+        $departamento = $_POST['departamento'];
+        $password = $_POST['password'];
+    
+        // Obtener el valor máximo de EMPLE_COD y aumentarlo en 1
+        $codmax = "SELECT MAX(EMPLE_COD) FROM EMPLEADOS";
+        $MAX = mysqli_query($conexion,$codmax);
+
+        $filaMax = mysqli_fetch_row($MAX);
+        $numMax = $filaMax[0] + 1;
+    
+        // Inserción en la base de datos
+        $insertarUser = "INSERT INTO EMPLEADOS (EMPLE_COD, EMPLE_DNI, EMPLE_NOM, EMPLE_APE, EMPLE_COD_POSTAL, EMPLE_DIR, EMPLE_TEL, EMPLE_NAC, EMPLE_SUELDO, EMPLE_MAIL, EMPLE_PUE, EMPLE_PASS, EMPLE_ROL, DEP_COD) 
+        VALUES ($numMax, '$dni', '$nombre', '$apellidos', $codigoPostal, '$direccion', $telefono, '$fechaNacimiento', $sueldo, '$email', '$puesto', '$password', 'EMPLEADO', $departamento)";
+    
+            if(mysqli_query($conexion,$insertarUser)){
+                header("Location: ../pages/adminempleados.php");
+            }else{
+                $_SESSION['error'] = "Ha ocurrido un error en la inserción: " . mysqli_error($conexion);
+                header("Location: ../pages/admincrearempleado.php");
+
+                exit();
+            }
+    }
+
+    
     function comprobarPassword(){
         $conexion = conectarBD();
         $usuario=$_SESSION["DNI_SESSION"];
+        $passOld = false;
+        echo ("$usuario");
+        echo $_SESSION["ROL_SESSION"];
+
 
         if($_SESSION["ROL_SESSION"]=="PACIENTE"){
-
-            $selectPass =  "SELECT PAC_PASS FROM PACIENTE WHERE PAC_DNI = '$usuario';";
-            $pass = mysqli_query($conexion, $selectPass);
-            $passOld=mysqli_fetch_row($pass)[0];
+            $selectPass = "SELECT PAC_PASS FROM PACIENTES WHERE PAC_DNI = '$usuario';";
         }else{
-            $selectPass =  "SELECT EMPLE_PASS FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
-            $pass = mysqli_query($conexion, $selectPass);
-            $passOld=mysqli_fetch_row($pass)[0];
+            $selectPass = "SELECT EMPLE_PASS FROM EMPLEADOS WHERE EMPLE_DNI = '$usuario';";
+        }
+
+        $pass = mysqli_query($conexion, $selectPass);
+        if (!$pass) {
+            die("ERROR: " . mysqli_error($conexion));
+        } else {
+            $passwd = mysqli_fetch_assoc($pass);
+            if ($passwd) {
+                $passOld = $passwd['PAC_PASS'] ?? $passwd['EMPLE_PASS'];
+            }
         }
 
         return $passOld;

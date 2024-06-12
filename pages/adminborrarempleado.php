@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/style/style.css">
-    <title>Eliminar paciente</title>
+    <title>Eliminar empleado</title>
 </head>
 <body>
 <?php include_once "../templates/header.php"; ?>
@@ -18,33 +18,25 @@
     <?php
     
         $DNI = $_SESSION["DNI_SESSION"];
-        $empleado = obtenerEmpleado($DNI);
-
-        if (!$empleado) {
-            echo "<h1>Error: Empleado no encontrado</h1>";
-            exit;
-        }
-
-        $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
-        $tienePacientes = comprobarPacientesAsignados($empleado['EMPLE_COD']);
+        $empleados = obtenerEmpleados();
 
     ?>
-        <h2>¿Que paciente deseas eliminar?</h2>
+        <h2>¿Que empleado deseas eliminar?</h2>
 
     <!---SELECT PARA SELECCIONAR PACIENTE CON TODAS LOS PACIENTE DISPONIBLES-->
 
-    <form method="post" action="" name="select_paciente" class="bloque eliminarpaciente">
+    <form method="post" action="" name="select_empleado" class="bloque eliminarpaciente">
         
         <select name="seleccion">
         
-            <?php foreach ($pacientes as $paciente) { ?>
+            <?php foreach ($empleados as $empleado) { ?>
        
-                <option value="<?php echo $paciente['PAC_DNI'] ?>"><?php echo $paciente['PAC_APE'] . ', ' . $paciente['PAC_NOM']; ?></option>
+                <option value="<?php echo $empleado['EMPLE_COD'] ?>"><?php echo $empleado['EMPLE_APE'] . ', ' . $empleado['EMPLE_NOM']; ?></option>
         
             <?php } ?>
 
         </select>
-        <button type="submit" name="elim" value="elim" class="enviar registro eliminar">Eliminar este paciente</button>
+        <button type="submit" name="elimEmple" value="elimEmple" class="enviar registro eliminar">Eliminar este empleado</button>
     
     </form> 
 

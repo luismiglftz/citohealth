@@ -1,7 +1,10 @@
 <?php
-    include_once "../backend/functions.php";
-    include_once "../backend/procesarlogin.php";
-    verificarSesion();
+include_once "../backend/functions.php";
+include_once "../backend/procesarlogin.php";
+verificarSesion();
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,18 +13,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/style/style.css">
-    <title>Crear paciente</title>
+    <title>Editar empleado</title>
 </head>
-<body id="registroPAC" class="regpac">
+<body id="infopers">
 <?php include_once "../templates/header.php"; ?>
-
-<!--FORMULARIO PARA RELLENAR LOS DATOS CON LOS NUEVO USUARIOS-->
 <div class="padrecontenedor">
-    <form method="post" action="" name="registrarPaciente" class="form">
-        <div class="linea_form">
-            <label for="DNI">DNI:</label>
-            <input type="text" id="DNI" name="DNI" required required>
-        </div>
+    <h2>Actualizar Información</h2>
+    <form method="post" action="" name="chg_info" class="form">
         <div class="linea_form">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
@@ -29,6 +27,10 @@
         <div class="linea_form">
             <label for="apellidos">Apellidos:</label>
             <input type="text" id="apellidos" name="apellidos" required>
+        </div>
+        <div class="linea_form">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" required>
         </div>
         <div class="linea_form">
             <label for="telefono">Teléfono:</label>
@@ -50,32 +52,37 @@
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion" required>
         </div>
-        <div class="linea_form">
-            <label for="ciudad">Ciudad:</label>
-            <input type="text" id="ciudad" name="ciudad" required>
-        </div>
-        <div class="linea_form">
-            <label for="provincia">Provincia:</label>
-            <input type="text" id="provincia" name="provincia" required>
-        </div>
-        <div class="linea_form">
-            <label for="pass">Contraseña:</label>
-            <input type="password" id="pass" name="pass" required>
+            <div class="linea_form">
+                <label for="provincia">Sueldo:</label>
+                <input type="text" id="sueldo" name="sueldo" required>
+            </div>
+            <div class="linea_form">
+                <label for="provincia">Puesto:</label>
+                <input type="text" id="puesto" name="puesto" required>
+            </div>
+            <div class="linea_form">
+                <label for="provincia">Departamento:</label>
+                <input type="text" id="departamento" name="departamento" required>
+            </div>
+            <div class="linea_form">
+            <label for="provincia">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
             <div class="mostrarPass">
                 <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
             </div>
         </div>
-        <div class="linea_form">
-            <label for="passv">Confirmar contraseña:</label>
-            <input type="password" id="passv" name="passv" required>
-            <div class="mostrarPass">
-                <input type="checkbox" onclick="mostrarPass(this)" class="mostrarPass"><p>Mostrar contraseña</p>
-            </div>
+        <div class="errores" id="errores">
+        <?php
+            if (isset($_SESSION["error"])) {
+                echo "<div id='errores' class='errores'>" . $_SESSION["error"] . "</div>";
+                unset($_SESSION["error"]); // LIMPIAR MENSAJE DE ERROR
+            }
+        ?>
         </div>
-        <button type="submit" name="registerpac" value="registerpac" class="botonreg">Registrar paciente</button>
+        <button type="submit" name="registeremple" class="registeremple">Crear empleado</button>
     </form>
-    <?php include_once "../templates/footer.php"; ?>
-    <script src="../assets/js/functions.js"></script>
-
+</div>
+<?php include_once "../templates/footer.php"; ?>
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>

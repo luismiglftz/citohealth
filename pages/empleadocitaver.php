@@ -15,11 +15,7 @@ $_SESSION['codemple'] = $empleado['EMPLE_COD'];
 
 $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
 
-if (empty($pacientes)) {
-    echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
-    echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
-    exit;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +31,16 @@ if (empty($pacientes)) {
 
 <body id="info" class="pacienteslista separar corto">
     <center>
+        <?php
+        //SI NO HAY NINGUN PACIENTE A SU NOMBRE SE PARA LA CARGA DE LA PAGINA Y TE PERMITE CREAR UN NUEVO PACIENTE
+            if (empty($pacientes)) {
+                echo "<h1>NO TIENES NINGUN PACIENTE A TU NOMBRE</h1>";
+                echo '<div><a href="empleadocrearpaciente.php" class="registro">Añadir paciente</a></div>';
+                
+                include_once "../templates/footer.php";
+                exit;
+            }
+        ?>
     <form method="post" action="" name="select_paciente" class="bloque">
         <select name="seleccion">
             <?php foreach ($pacientes as $paciente) { ?>
@@ -61,12 +67,14 @@ if (empty($pacientes)) {
         $conexion = conectarBD();
         $compdniPaciente = "SELECT * FROM PACIENTES WHERE PAC_DNI = '$seleccion';";
         $registroPaciente = mysqli_query($conexion, $compdniPaciente);
+
+
         
 
     ?>
         <div class="padrecontenedor">
             <h2> <?php echo $nombre ;  ?></h2>
-            <table>
+            <table id="tabla">
                 <tr>
                     <td>Código</td>
                     <td>Paciente</td>
@@ -100,13 +108,20 @@ if (empty($pacientes)) {
                     </tr>
                 <?php } ?>
             </table>
+            <div class="desplazamientoTablas" id="despTablas">
+            <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
+            <p id="infoPagina"></p>
+            <img src="../assets/media/flecha.png" onclick="siguientePagina()">
+        </div>
             <div>
-                <a href="empleadocitacrear.php?" class="registro">Añadir nueva cita</a>
+                <a href="empleadocitacrear.php?citadni=<?php echo $seleccion?>" class="registro">Añadir nueva cita</a>
             </div>
         </div>
     <?php } ?>
 
     <?php include_once "../templates/footer.php"; ?>
+    <script src="../assets/js/functions.js"></script>
+
     </center>
 </body>
 </html>

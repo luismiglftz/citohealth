@@ -22,7 +22,7 @@
     }else{
         ?>
         <div class="padrecontenedor">
-            <table>
+            <table id="tabla">
                 <tr>
                     <td>Código</td>
                     <td>Médico</td>
@@ -62,6 +62,6 @@
     ?>
 
 <?php include_once "../templates/footer.php"; ?>
-
+<script src="../assets/js/functions.js"></script>
 </body>
 </html>
