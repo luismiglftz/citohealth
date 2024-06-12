@@ -109,7 +109,7 @@ $pacientes = obtenerPacientes($empleado['EMPLE_COD']);
             <img src="../assets/media/flecha.png" onclick="siguientePagina()">
         </div>
         <div>
-            <a href="empleadohistorialcrear.php?citadni=<?php echo $seleccion?>" class="registro">Añadir nueva cita</a>
+            <a href="empleadohistorialcrear.php?citadni=<?php echo $seleccion?>" class="registro">Añadir</a>
         </div>
 
         <?php }  ?>

@@ -10,7 +10,6 @@
         <a href="../pages/empleadotratamientosver.php">Ver tratamientos</a>
         <?php if($_SESSION['USER_ROL'] == "ADMIN"){ ?>
             <a href="../pages/adminempleados.php">Administrar empleados</a> 
-            <a href="../pages/adminconsultas.php">Administrar consultas</a> 
         <?php } ?>
     <?php } ?>
     

@@ -28,39 +28,23 @@ if(isset($_GET['tratdni'])) {
 <!--FORMULARIO DE CREACION:-->
 <div class="padrecontenedor crearpac">
     <form method="post" action="" name="inicio_sesion" class="bloque">
-        <table>
-            <tr>
-                <td>
-                    <label>Descripción: </label>
-                </td>
-                <td>
-                    <label>Fecha: </label>
-                </td>
-                <td>
-                    <label>Fármacos: </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="textarea" name="desc" required />
-                </td>
-                <td>
-                    <input type="date" value="<?php echo date("Y-m-d");?>" max="<?php echo date("Y-m-d");?>" name="fec"/>
-                </td>
-                <td>
-                    <select name="farmacos[]" multiple required>
-                        <?php foreach ($farmacos as $farmaco) { ?>
-                            <option value="<?php echo $farmaco['FARM_COD']; ?>"><?php echo $farmaco['FARM_NOM']; ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-            <td colspan="3">
-                    <button type="submit" name="creartrat" value="creartrat" class="botonreg">Crear tratamiento</button>
-                </td>
-            </tr>
-            <?php include_once "../templates/footer.php"; ?>
+        <div class="elemento-form">
+            <label>Descripción:</label> <br>
+            <input type="textarea" name="desc" required />
+        </div>
+        <div class="elemento-form">
+            <label>Fecha:</label> <br>
+            <input type="date" value="<?php echo date("Y-m-d");?>" max="<?php echo date("Y-m-d");?>" name="fec"/>
+        </div>
+        <div class="elemento-form">
+            <label>Farmacos:</label> <br>
+                <select name="farmacos[]" multiple required>
+                    <?php foreach ($farmacos as $farmaco) { ?>
+                        <option value="<?php echo $farmaco['FARM_COD']; ?>"><?php echo $farmaco['FARM_NOM']; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+        <button type="submit" name="creartrat" value="creartrat" class="botonreg">Crear tratamiento</button>
     </form>
 </div>
 <?php include_once "../templates/footer.php"; ?>
