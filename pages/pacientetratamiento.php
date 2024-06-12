@@ -42,6 +42,11 @@ $tratamientos = obtenerTratamientos($DNI);
             <?php endforeach; ?>
         <?php endif; ?>
     </table>
+    <div class="desplazamientoTablas" id="despTablas">
+                <img src="../assets/media/flecha.png" onclick="anteriorPagina()">
+                <p id="infoPagina"></p>
+                <img src="../assets/media/flecha.png" onclick="siguientePagina()">
+            </div>
 </div>
 
 <?php include_once "../templates/footer.php"; ?>
