@@ -167,14 +167,10 @@ session_start();
 
     /*###------------####*/
     /*##- PEDIR CITAS -##*/
-    /*####-----------####*/
-    function pedirCita(){
-        verificarSesion();
-        obtenerDatosUsuarios();
-
-        
+    /*####-----------####*/        
         //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
         if (isset($_POST['enviarCita'])) {
+            $conexion = conectarBD();
             $fec = $_POST['fec'];
             $afec = $_POST['afec'];
             $tipo = $_POST['tipo'];
@@ -182,10 +178,10 @@ session_start();
             $DNI = $_SESSION["DNI_SESSION"];
             $emplecod = $_SESSION['EMPLE_COD'];
 
-            $conexion = conectarBD();
+            
 
-            $insertarCIT = "INSERT INTO CITAS (CITA_COD, PAC_DNI, EMPLE_COD, CITA_FEC, CITA_AFEC, CITA_TIPO) 
-                            VALUES (NULL, '$DNI', '$emplecod', '$fec', '$afec', '$tipo');";
+            $insertarCIT = "INSERT INTO CITAS (PAC_DNI, EMPLE_COD, CITA_FEC, CITA_AFEC, CITA_TIPO) 
+                            VALUES ('$DNI', '$emplecod', '$fec', '$afec', '$tipo');";
 
             if (!mysqli_query($conexion, $insertarCIT)) {
                 die("Error al insertar la cita: " . mysqli_error($conexion));
@@ -196,9 +192,6 @@ session_start();
             header('Location: pacientevercitas.php');
             exit;
         }
-
-    }
-
     //CUANDO SE PULSA EL BOTON DE ENVIAR SE INSERTA EN CITAS
     if (isset($_POST['enviarCitaEmple'])) {
         $conexion = conectarBD();
